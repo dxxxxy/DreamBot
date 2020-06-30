@@ -51,6 +51,29 @@ const expType = (pet) => {
     return type
 }
 
+
+const expNtype = (pet) => {
+    let body
+    switch (pet.tier) {
+        case "COMMON":
+            body = expNC
+            break
+        case "UNCOMMON":
+            body = expNU
+            break
+        case "RARE":
+            body = expNR
+            break
+        case "EPIC":
+            body = expNE
+            break
+        case "LEGENDARY":
+            body = expNL
+            break
+    }
+    return body
+}
+
 const rarity = (pet) => {
     let emoji
     switch (pet.tier) {
@@ -82,7 +105,7 @@ const formatNumbers = (n) => {
     } else if (n >= 1000) {
         body = `${(n/1000).toFixed(1)}k`
     } else {
-        body = n
+        body = n.toFixed(1)
     }
     return body
 }
@@ -101,7 +124,7 @@ exports.run = async(client, message, args) => {
         Register.findOne({
             userID: message.author.id
         }, async(err, res) => {
-            if (!res) return message.channel.send(utils.BasicEmbed("No Profile Found", colors.Yellow, "Make sure to set your profile with **d!setprofile <IGN>** before viewing your skills!"))
+            if (!res) return message.channel.send(utils.BasicEmbed("Error", colors.Yellow, "Please register using d!register <IGN>!"))
             if (err) return message.channel.send(utils.BasicEmbed("Error", colors.Red, err))
             profileArr = await fetch(`https://api.hypixel.net/Skyblock/profiles?key=${process.env.APIKEY}&uuid=${res.userUUID}`)
                 .then(res2 => res2.json())
@@ -123,7 +146,7 @@ exports.run = async(client, message, args) => {
                 .setColor(colors.Cyan)
             Object.keys(findProfile).forEach(pet => {
                 totalExp += +findProfile[pet].exp
-                embed.addField(`${(findProfile[pet].type).charAt(0).toUpperCase()}${((findProfile[pet].type).slice(1).toLowerCase())} ${rarity(findProfile[pet])}`, `Level ${getLvl(expType(findProfile[pet]), findProfile[pet].exp)}\n`, true)
+                embed.addField(`${(findProfile[pet].type).charAt(0).toUpperCase()}${((findProfile[pet].type).slice(1).toLowerCase())} ${rarity(findProfile[pet])}`, getLvl(expType(findProfile[pet]), findProfile[pet].exp) == 100 ? "**Maxed**" : `**Level ${getLvl(expType(findProfile[pet]), findProfile[pet].exp)}\n${(((((+findProfile[pet].exp) - +expType(findProfile[pet])[getLvl(expType(findProfile[pet]), findProfile[pet].exp) - 1])/(expNtype(findProfile[pet])[getLvl(expType(findProfile[pet]), findProfile[pet].exp)])))*100).toFixed(1)}%** to level ${+getLvl(expType(findProfile[pet]), findProfile[pet].exp)+1}\n**${formatNumbers((+findProfile[pet].exp) - +expType(findProfile[pet])[getLvl(expType(findProfile[pet]), findProfile[pet].exp) - 1])} / ${formatNumbers(expNtype(findProfile[pet])[getLvl(expType(findProfile[pet]), findProfile[pet].exp)])}**`, true)
             })
             embed.setDescription(`**Total exp:** ${formatNumbers(totalExp)}`)
             message.channel.send(embed)
@@ -152,7 +175,7 @@ exports.run = async(client, message, args) => {
             .setColor(colors.Cyan)
         Object.keys(findProfile).forEach(pet => {
             totalExp += +findProfile[pet].exp
-            embed.addField(`${(findProfile[pet].type).charAt(0).toUpperCase()}${((findProfile[pet].type).slice(1).toLowerCase())} ${rarity(findProfile[pet])}`, `Level ${getLvl(expType(findProfile[pet]), findProfile[pet].exp)}\n`, true)
+            embed.addField(`${(findProfile[pet].type).charAt(0).toUpperCase()}${((findProfile[pet].type).slice(1).toLowerCase())} ${rarity(findProfile[pet])}`, getLvl(expType(findProfile[pet]), findProfile[pet].exp) == 100 ? "**Maxed**" : `**Level ${getLvl(expType(findProfile[pet]), findProfile[pet].exp)}\n${(((((+findProfile[pet].exp) - +expType(findProfile[pet])[getLvl(expType(findProfile[pet]), findProfile[pet].exp) - 1])/(expNtype(findProfile[pet])[getLvl(expType(findProfile[pet]), findProfile[pet].exp)])))*100).toFixed(1)}%** to level ${+getLvl(expType(findProfile[pet]), findProfile[pet].exp)+1}\n**${formatNumbers((+findProfile[pet].exp) - +expType(findProfile[pet])[getLvl(expType(findProfile[pet]), findProfile[pet].exp) - 1])} / ${formatNumbers(expNtype(findProfile[pet])[getLvl(expType(findProfile[pet]), findProfile[pet].exp)])}**`, true)
         })
         embed.setDescription(`**Total exp:** ${formatNumbers(totalExp)}`)
         message.channel.send(embed)

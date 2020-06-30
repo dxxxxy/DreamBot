@@ -29,7 +29,7 @@ exports.run = async(client, message, args) => {
         Register.findOne({
             userID: message.author.id
         }, async(err, res) => {
-            if (!res) return message.channel.send(utils.BasicEmbed("Error", colors.Red, "Please make sure to register with the command \`d!register <IGN>\`!"))
+            if (!res) return message.channel.send(utils.BasicEmbed("Error", colors.Yellow, "Please register using d!register <IGN>!"))
             if (err) return message.channel.send(utils.BasicEmbed("Error", colors.Red, err))
             profileArr = await fetch(`https://api.hypixel.net/Skyblock/profiles?key=${process.env.APIKEY}&uuid=${res.userUUID}`)
                 .then(res2 => res2.json())
