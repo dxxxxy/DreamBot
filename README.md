@@ -1,2 +1,2 @@
-# Omri-Beta
- Beta version of my own discord bot.
+# DreamBOT
+ A skyblock stats discord bot made by DxxxxY#5818

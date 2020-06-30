@@ -42,6 +42,12 @@ const formatInfo = (emoji, name, body) => [
     true
 ]
 
+const formatHelp = (name, expl) => [
+    name,
+    expl,
+    true
+]
+
 const formatNumbers = (n) => {
     let body
     if (n >= 1000000000) {
@@ -75,9 +81,6 @@ const utils = {
         }, async(err, res) => {
             const apiKey = "9151ebae-e860-4346-8913-633317c85b58"
             if (err) return message.channel.send(utils.BasicEmbed("Error", colors.Red, err))
-            findName = await fetch(`https://api.hypixel.net/player?key=${apiKey}&uuid=${res.userUUID}`)
-                .then(res2 => res2.json())
-                .then(json => json.player.newPackageRank)
             let embed = new Discord.MessageEmbed()
                 .setTitle(`**Skills (${name} on ${profile})**`)
                 .setColor(colors.Cyan)
@@ -90,8 +93,8 @@ const utils = {
                 .addField(...formatSkills("<:Fishing:719349059185278998>", "Fishing", fishingL, fishingH, fishingN, 50, message))
                 .addField(...formatSkills("<:Enchanting:719349059487268994>", "Enchanting", enchantingL, enchantingH, enchantingN, 50, message))
                 .addField(...formatSkills("<:Alchemy:719349059441393674>", "Alchemy", alchemyL, alchemyH, alchemyN, 50, message))
-                .addField(...formatSkills("<:Carpentry:719349059261038594>", "Carpentry", carpentryL, carpentryH, carpentryN, findName ? 50 : 3, message))
-                .addField(...formatSkills("<:Runecrafting:719349059269427211>", "Runecrafting", runecraftingL, runecraftingH, runecraftingN, findName ? 25 : 3, message))
+                .addField(...formatSkills("<:Carpentry:719349059261038594>", "Carpentry", carpentryL, carpentryH, carpentryN, 25, message))
+                .addField(...formatSkills("<:Runecrafting:719349059269427211>", "Runecrafting", runecraftingL, runecraftingH, runecraftingN, 25, message))
                 .addField(...formatSkills("<:Taming:719349059579805757>", "Taming", tamingL, tamingH, tamingN, 50, message))
             return message.channel.send(embed)
         })
@@ -122,6 +125,19 @@ const utils = {
             .setTitle(`**${title}**`)
             .setColor(color)
             .setDescription(desc)
+        return embed
+    },
+    HelpEmbed: () => {
+        let embed = new Discord.MessageEmbed()
+            .setTitle("**Help**")
+            .setColor(colors.Cyan)
+            .setDescription("Please take note that **[] means required**, while **<> means optional**. To use commands without **<>**, please register yourself with the command **d!register**.")
+            .addField(...formatHelp("d!register [IGN]", "Register your name"))
+            .addField(...formatHelp("d!skills <IGN>", "View skills"))
+            .addField(...formatHelp("d!slayers <IGN>", "View slayers"))
+            .addField(...formatHelp("d!info <IGN>", "View basic info"))
+            .addField(...formatHelp("d!about", "Tools/APIs used"))
+            .addField(...formatHelp("d!invite", "Invite the bot to your server"))
         return embed
     }
 }
