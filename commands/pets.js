@@ -144,6 +144,7 @@ exports.run = async(client, message, args) => {
             let embed = new MessageEmbed()
                 .setTitle(`**Pets (${findName} on ${profileName[lastSaves.indexOf(Math.max(...lastSaves))]}**)`)
                 .setColor(colors.Cyan)
+                .setThumbnail(`https://visage.surgeplay.com/full/${res.userUUID}.png`)
             Object.keys(findProfile).forEach(pet => {
                 totalExp += +findProfile[pet].exp
                 embed.addField(`${(findProfile[pet].type).charAt(0).toUpperCase()}${((findProfile[pet].type).slice(1).toLowerCase())} ${rarity(findProfile[pet])}`, getLvl(expType(findProfile[pet]), findProfile[pet].exp) == 100 ? "**Maxed**" : `**Level ${getLvl(expType(findProfile[pet]), findProfile[pet].exp)}\n${(((((+findProfile[pet].exp) - +expType(findProfile[pet])[getLvl(expType(findProfile[pet]), findProfile[pet].exp) - 1])/(expNtype(findProfile[pet])[getLvl(expType(findProfile[pet]), findProfile[pet].exp)])))*100).toFixed(1)}%** to level ${+getLvl(expType(findProfile[pet]), findProfile[pet].exp)+1}\n**${formatNumbers((+findProfile[pet].exp) - +expType(findProfile[pet])[getLvl(expType(findProfile[pet]), findProfile[pet].exp) - 1])} / ${formatNumbers(expNtype(findProfile[pet])[getLvl(expType(findProfile[pet]), findProfile[pet].exp)])}**`, true)
@@ -173,6 +174,7 @@ exports.run = async(client, message, args) => {
         let embed = new MessageEmbed()
             .setTitle(`**Pets (${findName} on ${profileName[lastSaves.indexOf(Math.max(...lastSaves))]}**)`)
             .setColor(colors.Cyan)
+            .setThumbnail(`https://visage.surgeplay.com/full/${findUUID}.png`)
         Object.keys(findProfile).forEach(pet => {
             totalExp += +findProfile[pet].exp
             embed.addField(`${(findProfile[pet].type).charAt(0).toUpperCase()}${((findProfile[pet].type).slice(1).toLowerCase())} ${rarity(findProfile[pet])}`, getLvl(expType(findProfile[pet]), findProfile[pet].exp) == 100 ? "**Maxed**" : `**Level ${getLvl(expType(findProfile[pet]), findProfile[pet].exp)}\n${(((((+findProfile[pet].exp) - +expType(findProfile[pet])[getLvl(expType(findProfile[pet]), findProfile[pet].exp) - 1])/(expNtype(findProfile[pet])[getLvl(expType(findProfile[pet]), findProfile[pet].exp)])))*100).toFixed(1)}%** to level ${+getLvl(expType(findProfile[pet]), findProfile[pet].exp)+1}\n**${formatNumbers((+findProfile[pet].exp) - +expType(findProfile[pet])[getLvl(expType(findProfile[pet]), findProfile[pet].exp) - 1])} / ${formatNumbers(expNtype(findProfile[pet])[getLvl(expType(findProfile[pet]), findProfile[pet].exp)])}**`, true)
