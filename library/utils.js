@@ -135,6 +135,7 @@ const utils = {
             .addField(...formatHelp("d!register [IGN]", "Register your name"))
             .addField(...formatHelp("d!skills <IGN>", "View skills"))
             .addField(...formatHelp("d!slayers <IGN>", "View slayers"))
+            .addField(...formatHelp("d!pets <IGN>", "View pets"))
             .addField(...formatHelp("d!info <IGN>", "View basic info"))
             .addField(...formatHelp("d!about", "Tools/APIs used"))
             .addField(...formatHelp("d!invite", "Invite the bot to your server"))
