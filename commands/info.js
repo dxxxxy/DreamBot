@@ -67,6 +67,6 @@ exports.run = async(client, message, args) => {
         findName = await fetch(`https://mcapi.ca/player/profile/${findUUID}`)
             .then(res2 => res2.json())
             .then(json => json.name)
-        message.channel.send(utils.InfoEmbed(findName, profileName[lastSaves.indexOf(Math.max(...lastSaves))], `https://visage.surgeplay.com/full/${findUUID}.png`, !findProfile.members[findUUID].fairy_souls_collected ? "**0 / 194**" : `**${findProfile.members[findUUID].fairy_souls_collected} / 194**`, (findProfile.members[findUUID].coin_purse).toFixed(1), !findProfile.banking ? "API disabled" : `**${formatNumbers(findProfile.banking.balance)}** coins`))
+        message.channel.send(utils.InfoEmbed(findName, profileName[lastSaves.indexOf(Math.max(...lastSaves))], `https://visage.surgeplay.com/full/${findUUID}.png`, !findProfile.members[findUUID].fairy_souls_collected ? "**0 / 201**" : `**${findProfile.members[findUUID].fairy_souls_collected} / 201**`, (findProfile.members[findUUID].coin_purse).toFixed(1), !findProfile.banking ? "API disabled" : `**${formatNumbers(findProfile.banking.balance)}** coins`))
     }
 }
