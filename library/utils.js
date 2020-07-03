@@ -48,6 +48,12 @@ const formatHelp = (name, expl) => [
     true
 ]
 
+const formatTimers = (emoji, name, body) => [
+    `${emoji} ${name}`,
+    `**${body}**`,
+    true
+]
+
 const formatNumbers = (n) => {
     let body
     if (n >= 1000000000) {
@@ -137,8 +143,22 @@ const utils = {
             .addField(...formatHelp("d!slayers <IGN>", "View slayers"))
             .addField(...formatHelp("d!pets <IGN>", "View pets"))
             .addField(...formatHelp("d!info <IGN>", "View basic info"))
-            .addField(...formatHelp("d!about", "Tools/APIs used"))
             .addField(...formatHelp("d!invite", "Invite the bot to your server"))
+            .addField(...formatHelp("d!timers", "Timers before events start"))
+        return embed
+    },
+    TimersEmbed: (tz, soj, sf, da, mb, bi, ny) => {
+        let embed = new Discord.MessageEmbed()
+            .setTitle("**Timers**")
+            .setColor(colors.Cyan)
+            .addField(...formatTimers("<:Zoo:728734342305677443>", "Travelling Zoo", tz))
+            .addField(...formatTimers("<:Jerry:728734342276317224>", "Season of Jerry", soj))
+            .addField(...formatTimers("<:Spooky:728734342313934928>", "Spooky Festival", sf))
+            .addField(...formatTimers("<:Dark:728734342796279818>", "Dark Auction", da))
+            .addField(...formatTimers("<:Magma:728734341785452656>", "Magma Boss", mb))
+            .addField(...formatTimers("<:Interest:728734341772869708>", "Bank Interest", bi))
+            .addField(...formatTimers("<:New:728734341714411590>", "New Year", ny))
+            .setFooter("Thanks to InventiveTalent for the API")
         return embed
     }
 }
