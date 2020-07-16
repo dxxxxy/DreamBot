@@ -160,7 +160,8 @@ const utils = {
             .addField(...formatTimers("<:New:728734341714411590>", "New Year", ny))
             .setFooter("Thanks to InventiveTalent for the API")
         return embed
-    }
+    },
+    CD: 30000
 }
 
 module.exports = utils

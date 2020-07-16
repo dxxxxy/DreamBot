@@ -8,7 +8,7 @@ exports.run = async(client, message, args) => {
     talkedRecently.add(message.author.id);
     setTimeout(() => {
         talkedRecently.delete(message.author.id)
-    }, 60000)
+    }, utils.CD)
     tz = await fetch("https://hypixel-api.inventivetalent.org/api/skyblock/zoo/estimate")
         .then(res2 => res2.json())
         .then(json => json.estimateRelative)

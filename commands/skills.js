@@ -24,7 +24,7 @@ exports.run = async(client, message, args) => {
     talkedRecently.add(message.author.id);
     setTimeout(() => {
         talkedRecently.delete(message.author.id)
-    }, 60000)
+    }, utils.CD)
     if (!args[0]) {
         Register.findOne({
             userID: message.author.id
@@ -63,6 +63,7 @@ exports.run = async(client, message, args) => {
         findUUID = await fetch(`https://api.minetools.eu/uuid/${args[0]}`)
             .then(res2 => res2.json())
             .then(json => json.id)
+        if (!findUUID) return message.channel.send(utils.BasicEmbed("Error", colors.Red, "This IGN does not exist!"))
         profileArr = await fetch(`https://api.hypixel.net/Skyblock/profiles?key=${process.env.APIKEY}&uuid=${findUUID}`)
             .then(res2 => res2.json())
             .then(json => json.profiles)

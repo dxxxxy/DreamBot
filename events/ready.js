@@ -14,6 +14,6 @@ module.exports = async(client) => {
         console.log('Mongoose connection disconnected')
     })
     console.log(`Logged in as ${client.user.tag}!`)
-    client.user.setActivity(`over ${client.users.cache.size - 1} users | v1.2`, { type: "WATCHING" })
-    setInterval(() => { client.user.setActivity(`over ${client.users.cache.size-1} users | v1.2`, { type: "WATCHING" }) }, 60000)
+    client.user.setActivity(`over ${client.users.cache.size - 1} users | v1.3`, { type: "WATCHING" })
+    setInterval(() => { client.user.setActivity(`over ${client.users.cache.size-1} users | v1.3`, { type: "WATCHING" }) }, 60000)
 }

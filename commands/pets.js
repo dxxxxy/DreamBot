@@ -4,11 +4,12 @@ const Register = require("../models/register.js")
 const fetch = require("node-fetch")
 const { MessageEmbed } = require("discord.js")
 const talkedRecently = new Set()
-const rC = ":white_circle:",
-    rU = ":green_circle:",
-    rR = ":blue_circle:",
-    rE = ":purple_circle:",
-    rL = ":yellow_circle:"
+
+const rC = ":white_circle:"
+const rU = ":green_circle:"
+const rR = ":blue_circle:"
+const rE = ":purple_circle:"
+const rL = ":yellow_circle:"
 
 const expCC = [0, 100, 210, 330, 460, 605, 765, 940, 1130, 1340, 1570, 1820, 2095, 2395, 2725, 3085, 3485, 3925, 4415, 4955, 5555, 6215, 6945, 7745, 8625, 9585, 10635, 11785, 13045, 14425, 15935, 17585, 19385, 21345, 23475, 25785, 28285, 30985, 33905, 37065, 40485, 44185, 48185, 52535, 57285, 62485, 68185, 74485, 81485, 89285, 97985, 107685, 118485, 130485, 143785, 158485, 174685, 192485, 211985, 233285, 256485, 281685, 309085, 338885, 371285, 406485, 444685, 486085, 530885, 579285, 631485, 687685, 748085, 812885, 882285, 956485, 1035685, 1120385, 1211085, 1308285, 1412485, 1524185, 1643885, 1772085, 1909285, 2055985, 2212685, 2380385, 2560085, 2752785, 2959485, 3181185, 3418885, 3673585, 3946285, 4237985, 4549685, 4883385, 5241085, 5624785]
 const expCU = [0, 175, 365, 575, 805, 1055, 1330, 1630, 1960, 2320, 2720, 3160, 3650, 4190, 4790, 5450, 6180, 6980, 7860, 8820, 9870, 11020, 12280, 13660, 15170, 16820, 18620, 20580, 22710, 25020, 27520, 30220, 33140, 36300, 39720, 43420, 47420, 51770, 56520, 61720, 67420, 73720, 80720, 88520, 97220, 106920, 117720, 129720, 143020, 157720, 173920, 191720, 211220, 232520, 255720, 280920, 308320, 338120, 370520, 405720, 443920, 485320, 530120, 578520, 630720, 686920, 747320, 812120, 881520, 955720, 1034920, 1119620, 1210320, 1307520, 1411720, 1523420, 1643120, 1771320, 1908520, 2055220, 2211920, 2379620, 2559320, 2752020, 2958720, 3180420, 3418120, 3672820, 3945520, 4237220, 4548920, 4882620, 5240320, 5624020, 6035720, 6477420, 6954120, 7470820, 8032520, 8644220]
@@ -22,11 +23,25 @@ const expNR = [0, 275, 300, 330, 360, 400, 440, 490, 540, 600, 660, 730, 800, 88
 const expNE = [0, 440, 490, 540, 600, 660, 730, 800, 880, 960, 1050, 1150, 1260, 1380, 1510, 1650, 1800, 1960, 2130, 2310, 2500, 2700, 2920, 3160, 3420, 3700, 4000, 4350, 4750, 5200, 5700, 6300, 7000, 7800, 8700, 9700, 10800, 12000, 13300, 14700, 16200, 17800, 19500, 21300, 23200, 25200, 27400, 29800, 32400, 35200, 38200, 41400, 44800, 48400, 52200, 56200, 60400, 64800, 69400, 74200, 79200, 84700, 90700, 97200, 104200, 111700, 119700, 128200, 137200, 146700, 156700, 167700, 179700, 192700, 206700, 221700, 237700, 254700, 272700, 291700, 311700, 333700, 357700, 383700, 411700, 441700, 476700, 516700, 561700, 611700, 666700, 726700, 791700, 861700, 936700, 1016700, 1101700, 1191700, 1286700, 1386700]
 const expNL = [0, 660, 730, 800, 880, 960, 1050, 1150, 1260, 1380, 1510, 1650, 1800, 1960, 2130, 2310, 2500, 2700, 2920, 3160, 3420, 3700, 4000, 4350, 4750, 5200, 5700, 6300, 7000, 7800, 8700, 9700, 10800, 12000, 13300, 14700, 16200, 17800, 19500, 21300, 23200, 25200, 27400, 29800, 32400, 35200, 38200, 41400, 44800, 48400, 52200, 56200, 60400, 64800, 69400, 74200, 79200, 84700, 90700, 97200, 104200, 111700, 119700, 128200, 137200, 146700, 156700, 167700, 179700, 192700, 206700, 221700, 237700, 254700, 272700, 291700, 311700, 333700, 357700, 383700, 411700, 441700, 476700, 516700, 561700, 611700, 666700, 726700, 791700, 861700, 936700, 1016700, 1101700, 1191700, 1286700, 1386700, 1496700, 1616700, 1746700, 1886700]
 
+const milestoneF = [250, 1000, 2500, 5000, 10000]
+const milestoneM = [2500, 7500, 20000, 100000, 250000]
+
 const getLvl = (pet, xp) => {
     for (let i in pet) {
         if (xp < pet[i]) return i
     }
     return (pet.length).toString()
+}
+
+const getLvl2 = (pet, xp) => {
+    for (let i in pet) {
+        if (xp < pet[i]) return pet[i]
+    }
+    return (pet.length).toString()
+}
+
+String.prototype.capitalize = function() {
+    return this.toLowerCase().replace(/_/g, " ").replace(/(^|\s)([a-z])/g, function(m, p1, p2) { return p1 + p2.toUpperCase() })
 }
 
 const expType = (pet) => {
@@ -137,7 +152,7 @@ exports.run = async(client, message, args) => {
             currentProfile = profileID[lastSaves.indexOf(Math.max(...lastSaves))]
             findProfile = await fetch(`https://api.hypixel.net/skyblock/profile?key=${process.env.APIKEY}&profile=${currentProfile}`)
                 .then(res2 => res2.json())
-                .then(json => json.profile.members[res.userUUID].pets)
+                .then(json => json.profile.members[res.userUUID])
             findName = await fetch(`https://mcapi.ca/player/profile/${res.userUUID}`)
                 .then(res2 => res2.json())
                 .then(json => json.name)
@@ -145,17 +160,18 @@ exports.run = async(client, message, args) => {
                 .setTitle(`**Pets (${findName} on ${profileName[lastSaves.indexOf(Math.max(...lastSaves))]}**)`)
                 .setColor(colors.Cyan)
                 .setThumbnail(`https://visage.surgeplay.com/full/${res.userUUID}.png`)
-            Object.keys(findProfile).forEach(pet => {
-                totalExp += +findProfile[pet].exp
-                embed.addField(`${(findProfile[pet].type).charAt(0).toUpperCase()}${((findProfile[pet].type).slice(1).toLowerCase())} ${rarity(findProfile[pet])}`, getLvl(expType(findProfile[pet]), findProfile[pet].exp) == 100 ? "**Maxed**" : `**Level ${getLvl(expType(findProfile[pet]), findProfile[pet].exp)}\n${(((((+findProfile[pet].exp) - +expType(findProfile[pet])[getLvl(expType(findProfile[pet]), findProfile[pet].exp) - 1])/(expNtype(findProfile[pet])[getLvl(expType(findProfile[pet]), findProfile[pet].exp)])))*100).toFixed(1)}%** to level ${+getLvl(expType(findProfile[pet]), findProfile[pet].exp)+1}\n**${formatNumbers((+findProfile[pet].exp) - +expType(findProfile[pet])[getLvl(expType(findProfile[pet]), findProfile[pet].exp) - 1])} / ${formatNumbers(expNtype(findProfile[pet])[getLvl(expType(findProfile[pet]), findProfile[pet].exp)])}**`, true)
+            Object.keys(findProfile.pets).forEach(pet => {
+                totalExp += +findProfile.pets[pet].exp
+                embed.addField(`${(findProfile.pets[pet].type).capitalize()} ${rarity(findProfile.pets[pet])}`, getLvl(expType(findProfile.pets[pet]), findProfile.pets[pet].exp) == 100 ? "**Maxed**" : `**Level ${getLvl(expType(findProfile.pets[pet]), findProfile.pets[pet].exp)}\n${(((((+findProfile.pets[pet].exp) - +expType(findProfile.pets[pet])[getLvl(expType(findProfile.pets[pet]), findProfile.pets[pet].exp) - 1])/(expNtype(findProfile.pets[pet])[getLvl(expType(findProfile.pets[pet]), findProfile.pets[pet].exp)])))*100).toFixed(1)}%** to level ${+getLvl(expType(findProfile.pets[pet]), findProfile.pets[pet].exp)+1}\n**${formatNumbers((+findProfile.pets[pet].exp) - +expType(findProfile.pets[pet])[getLvl(expType(findProfile.pets[pet]), findProfile.pets[pet].exp) - 1])} / ${formatNumbers(expNtype(findProfile.pets[pet])[getLvl(expType(findProfile.pets[pet]), findProfile.pets[pet].exp)])}**`, true)
             })
-            embed.setDescription(`**Total exp:** ${formatNumbers(totalExp)}`)
+            embed.setDescription(`**Total exp:** ${formatNumbers(totalExp)}\n**<:Fish:733145290395090984> Fishing Milestone:** ${findProfile.stats.pet_milestone_sea_creatures_killed} / ${getLvl2(milestoneF, findProfile.stats.pet_milestone_sea_creatures_killed)}\n**<:Mine:733145290307141642> Mining Milestone:** ${findProfile.stats.pet_milestone_ores_mined} / ${getLvl2(milestoneM, findProfile.stats.pet_milestone_ores_mined)}`)
             message.channel.send(embed)
         })
     } else {
         findUUID = await fetch(`https://api.minetools.eu/uuid/${args[0]}`)
             .then(res2 => res2.json())
             .then(json => json.id)
+        if (!findUUID) return message.channel.send(utils.BasicEmbed("Error", colors.Red, "This IGN does not exist!"))
         profileArr = await fetch(`https://api.hypixel.net/Skyblock/profiles?key=${process.env.APIKEY}&uuid=${findUUID}`)
             .then(res2 => res2.json())
             .then(json => json.profiles)
@@ -167,7 +183,7 @@ exports.run = async(client, message, args) => {
         currentProfile = profileID[lastSaves.indexOf(Math.max(...lastSaves))]
         findProfile = await fetch(`https://api.hypixel.net/skyblock/profile?key=${process.env.APIKEY}&profile=${currentProfile}`)
             .then(res2 => res2.json())
-            .then(json => json.profile.members[findUUID].pets)
+            .then(json => json.profile.members[findUUID])
         findName = await fetch(`https://mcapi.ca/player/profile/${findUUID}`)
             .then(res2 => res2.json())
             .then(json => json.name)
@@ -175,11 +191,11 @@ exports.run = async(client, message, args) => {
             .setTitle(`**Pets (${findName} on ${profileName[lastSaves.indexOf(Math.max(...lastSaves))]}**)`)
             .setColor(colors.Cyan)
             .setThumbnail(`https://visage.surgeplay.com/full/${findUUID}.png`)
-        Object.keys(findProfile).forEach(pet => {
-            totalExp += +findProfile[pet].exp
-            embed.addField(`${(findProfile[pet].type).charAt(0).toUpperCase()}${((findProfile[pet].type).slice(1).toLowerCase())} ${rarity(findProfile[pet])}`, getLvl(expType(findProfile[pet]), findProfile[pet].exp) == 100 ? "**Maxed**" : `**Level ${getLvl(expType(findProfile[pet]), findProfile[pet].exp)}\n${(((((+findProfile[pet].exp) - +expType(findProfile[pet])[getLvl(expType(findProfile[pet]), findProfile[pet].exp) - 1])/(expNtype(findProfile[pet])[getLvl(expType(findProfile[pet]), findProfile[pet].exp)])))*100).toFixed(1)}%** to level ${+getLvl(expType(findProfile[pet]), findProfile[pet].exp)+1}\n**${formatNumbers((+findProfile[pet].exp) - +expType(findProfile[pet])[getLvl(expType(findProfile[pet]), findProfile[pet].exp) - 1])} / ${formatNumbers(expNtype(findProfile[pet])[getLvl(expType(findProfile[pet]), findProfile[pet].exp)])}**`, true)
+        Object.keys(findProfile.pets).forEach(pet => {
+            totalExp += +findProfile.pets[pet].exp
+            embed.addField(`${(findProfile.pets[pet].type).capitalize()} ${rarity(findProfile.pets[pet])}`, getLvl(expType(findProfile.pets[pet]), findProfile.pets[pet].exp) == 100 ? "**Maxed**" : `**Level ${getLvl(expType(findProfile.pets[pet]), findProfile.pets[pet].exp)}\n${(((((+findProfile.pets[pet].exp) - +expType(findProfile.pets[pet])[getLvl(expType(findProfile.pets[pet]), findProfile.pets[pet].exp) - 1])/(expNtype(findProfile.pets[pet])[getLvl(expType(findProfile.pets[pet]), findProfile.pets[pet].exp)])))*100).toFixed(1)}%** to level ${+getLvl(expType(findProfile.pets[pet]), findProfile.pets[pet].exp)+1}\n**${formatNumbers((+findProfile.pets[pet].exp) - +expType(findProfile.pets[pet])[getLvl(expType(findProfile.pets[pet]), findProfile.pets[pet].exp) - 1])} / ${formatNumbers(expNtype(findProfile.pets[pet])[getLvl(expType(findProfile.pets[pet]), findProfile.pets[pet].exp)])}**`, true)
         })
-        embed.setDescription(`**Total exp:** ${formatNumbers(totalExp)}`)
+        embed.setDescription(`**Total exp:** ${formatNumbers(totalExp)}\n**<:Fish:733145290395090984> Fishing Milestone:** ${findProfile.stats.pet_milestone_sea_creatures_killed} / ${getLvl2(milestoneF, findProfile.stats.pet_milestone_sea_creatures_killed)}\n**<:Mine:733145290307141642> Mining Milestone:** ${findProfile.stats.pet_milestone_ores_mined} / ${getLvl2(milestoneM, findProfile.stats.pet_milestone_ores_mined)}`)
         message.channel.send(embed)
     }
 }

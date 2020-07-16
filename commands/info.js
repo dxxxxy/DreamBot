@@ -24,7 +24,7 @@ exports.run = async(client, message, args) => {
     talkedRecently.add(message.author.id);
     setTimeout(() => {
         talkedRecently.delete(message.author.id)
-    }, 60000)
+    }, utils.CD)
     if (!args[0]) {
         Register.findOne({
             userID: message.author.id
@@ -46,12 +46,13 @@ exports.run = async(client, message, args) => {
             findName = await fetch(`https://mcapi.ca/player/profile/${res.userUUID}`)
                 .then(res2 => res2.json())
                 .then(json => json.name)
-            message.channel.send(utils.InfoEmbed(findName, profileName[lastSaves.indexOf(Math.max(...lastSaves))], `https://visage.surgeplay.com/full/${res.userUUID}.png`, !findProfile.members[res.userUUID].fairy_souls_collected ? "**0 / 201**" : `**${findProfile.members[res.userUUID].fairy_souls_collected} / 201**`, (findProfile.members[res.userUUID].coin_purse).toFixed(1), !findProfile.banking ? "API disabled" : `**${formatNumbers(findProfile.banking.balance)}** coins`))
+            message.channel.send(utils.InfoEmbed(findName, profileName[lastSaves.indexOf(Math.max(...lastSaves))], `https://visage.surgeplay.com/full/${res.userUUID}.png`, !findProfile.members[res.userUUID].fairy_souls_collected ? "**0 / 209**" : `**${findProfile.members[res.userUUID].fairy_souls_collected} / 209**`, (findProfile.members[res.userUUID].coin_purse).toFixed(1), !findProfile.banking ? "API disabled" : `**${formatNumbers(findProfile.banking.balance)}** coins`))
         })
     } else {
         findUUID = await fetch(`https://api.minetools.eu/uuid/${args[0]}`)
             .then(res2 => res2.json())
             .then(json => json.id)
+        if (!findUUID) return message.channel.send(utils.BasicEmbed("Error", colors.Red, "This IGN does not exist!"))
         profileArr = await fetch(`https://api.hypixel.net/Skyblock/profiles?key=${process.env.APIKEY}&uuid=${findUUID}`)
             .then(res2 => res2.json())
             .then(json => json.profiles)
@@ -67,6 +68,6 @@ exports.run = async(client, message, args) => {
         findName = await fetch(`https://mcapi.ca/player/profile/${findUUID}`)
             .then(res2 => res2.json())
             .then(json => json.name)
-        message.channel.send(utils.InfoEmbed(findName, profileName[lastSaves.indexOf(Math.max(...lastSaves))], `https://visage.surgeplay.com/full/${findUUID}.png`, !findProfile.members[findUUID].fairy_souls_collected ? "**0 / 201**" : `**${findProfile.members[findUUID].fairy_souls_collected} / 201**`, (findProfile.members[findUUID].coin_purse).toFixed(1), !findProfile.banking ? "API disabled" : `**${formatNumbers(findProfile.banking.balance)}** coins`))
+        message.channel.send(utils.InfoEmbed(findName, profileName[lastSaves.indexOf(Math.max(...lastSaves))], `https://visage.surgeplay.com/full/${findUUID}.png`, !findProfile.members[findUUID].fairy_souls_collected ? "**0 / 209**" : `**${findProfile.members[findUUID].fairy_souls_collected} / 209**`, (findProfile.members[findUUID].coin_purse).toFixed(1), !findProfile.banking ? "API disabled" : `**${formatNumbers(findProfile.banking.balance)}** coins`))
     }
 }
