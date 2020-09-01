@@ -1,7 +1,7 @@
 const mongoose = require("mongoose")
 
 module.exports = async(client) => {
-    mongoose.connect("mongodb+srv://DreamY:alpine@valiant-rg7zq.mongodb.net/Valiant", { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false })
+    mongoose.connect("yourdbserver", { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false })
     mongoose.connection.on('connected', () => {
         console.log('Mongoose connection successfully opened!')
     })
