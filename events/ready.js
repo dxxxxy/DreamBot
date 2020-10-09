@@ -1,7 +1,7 @@
 const mongoose = require("mongoose")
 
 module.exports = async(client) => {
-    mongoose.connect("yourdbserver", { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false })
+    mongoose.connect(process.env.DATABASE, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false })
     mongoose.connection.on('connected', () => {
         console.log('Mongoose connection successfully opened!')
     })
