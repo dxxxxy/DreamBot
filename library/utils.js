@@ -161,7 +161,7 @@ const utils = {
             .setFooter("Thanks to InventiveTalent for the API")
         return embed
     },
-    CD: 30000
+    CD: 1
 }
 
 module.exports = utils

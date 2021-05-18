@@ -11,7 +11,7 @@ const formatNumbers = (n) => {
     } else if (n >= 1000) {
         body = `${(n/1000).toFixed(1)}k`
     } else {
-        body = n
+        body = n.toFixed(1)
     }
     return body
 }
@@ -43,10 +43,10 @@ exports.run = async(client, message, args) => {
             findProfile = await fetch(`https://api.hypixel.net/skyblock/profile?key=${process.env.APIKEY}&profile=${currentProfile}`)
                 .then(res2 => res2.json())
                 .then(json => json.profile)
-            findName = await fetch(`https://mcapi.ca/player/profile/${res.userUUID}`)
+            findName = await fetch(`https://api.minetools.eu/uuid/${res.userUUID}`)
                 .then(res2 => res2.json())
                 .then(json => json.name)
-            message.channel.send(utils.InfoEmbed(findName, profileName[lastSaves.indexOf(Math.max(...lastSaves))], `https://visage.surgeplay.com/full/${res.userUUID}.png`, !findProfile.members[res.userUUID].fairy_souls_collected ? "**0 / 209**" : `**${findProfile.members[res.userUUID].fairy_souls_collected} / 209**`, (findProfile.members[res.userUUID].coin_purse).toFixed(1), !findProfile.banking ? "API disabled" : `**${formatNumbers(findProfile.banking.balance)}** coins`))
+            message.channel.send(utils.InfoEmbed(findName, profileName[lastSaves.indexOf(Math.max(...lastSaves))], `https://visage.surgeplay.com/full/${res.userUUID}.png`, !findProfile.members[res.userUUID].fairy_souls_collected ? "**0 / 227**" : `**${findProfile.members[res.userUUID].fairy_souls_collected} / 227**`, (findProfile.members[res.userUUID].coin_purse).toFixed(1), !findProfile.banking ? "API disabled" : `**${formatNumbers(findProfile.banking.balance)}** coins`))
         })
     } else {
         findUUID = await fetch(`https://api.minetools.eu/uuid/${args[0]}`)
@@ -65,7 +65,7 @@ exports.run = async(client, message, args) => {
         findProfile = await fetch(`https://api.hypixel.net/skyblock/profile?key=${process.env.APIKEY}&profile=${currentProfile}`)
             .then(res2 => res2.json())
             .then(json => json.profile)
-        findName = await fetch(`https://mcapi.ca/player/profile/${findUUID}`)
+        findName = await fetch(`https://api.minetools.eu/uuid/${findUUID}`)
             .then(res2 => res2.json())
             .then(json => json.name)
         message.channel.send(utils.InfoEmbed(findName, profileName[lastSaves.indexOf(Math.max(...lastSaves))], `https://visage.surgeplay.com/full/${findUUID}.png`, !findProfile.members[findUUID].fairy_souls_collected ? "**0 / 209**" : `**${findProfile.members[findUUID].fairy_souls_collected} / 209**`, (findProfile.members[findUUID].coin_purse).toFixed(1), !findProfile.banking ? "API disabled" : `**${formatNumbers(findProfile.banking.balance)}** coins`))

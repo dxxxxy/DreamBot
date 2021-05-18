@@ -42,7 +42,7 @@ exports.run = async(client, message, args) => {
             var revL = getLvl(all_xp_cap, Math.floor(findProfile.slayer_bosses.zombie.xp)),
                 tarL = getLvl(all_xp_cap, Math.floor(findProfile.slayer_bosses.spider.xp)),
                 svenL = getLvl(wolf_xp_cap, Math.floor(findProfile.slayer_bosses.wolf.xp))
-            findName = await fetch(`https://mcapi.ca/player/profile/${res.userUUID}`)
+            findName = await fetch(`https://api.minetools.eu/uuid/${res.userUUID}`)
                 .then(res2 => res2.json())
                 .then(json => json.name)
             message.channel.send(utils.SlayersEmbed(findName, profileName[lastSaves.indexOf(Math.max(...lastSaves))], !findProfile.slayer_bosses.zombie.xp ? revL = 0 : revL, !findProfile.slayer_bosses.spider.xp ? tarL = 0 : tarL, !findProfile.slayer_bosses.wolf.xp ? svenL = 0 : svenL, `https://visage.surgeplay.com/full/${res.userUUID}.png`, (findProfile.slayer_bosses.zombie.xp), all_xp_cap[revL], (findProfile.slayer_bosses.spider.xp), all_xp_cap[tarL], (findProfile.slayer_bosses.wolf.xp), wolf_xp_cap[svenL], (findProfile.slayer_bosses.zombie.xp), (findProfile.slayer_bosses.spider.xp), (findProfile.slayer_bosses.wolf.xp)))
@@ -67,7 +67,7 @@ exports.run = async(client, message, args) => {
         var revL = getLvl(all_xp_cap, Math.floor(findProfile.slayer_bosses.zombie.xp)),
             tarL = getLvl(all_xp_cap, Math.floor(findProfile.slayer_bosses.spider.xp)),
             svenL = getLvl(wolf_xp_cap, Math.floor(findProfile.slayer_bosses.wolf.xp))
-        findName = await fetch(`https://mcapi.ca/player/profile/${findUUID}`)
+        findName = await fetch(`https://api.minetools.eu/uuid/${findUUID}`)
             .then(res2 => res2.json())
             .then(json => json.name)
         message.channel.send(utils.SlayersEmbed(findName, profileName[lastSaves.indexOf(Math.max(...lastSaves))], !findProfile.slayer_bosses.zombie.xp ? revL = 0 : revL, !findProfile.slayer_bosses.spider.xp ? tarL = 0 : tarL, !findProfile.slayer_bosses.wolf.xp ? svenL = 0 : svenL, `https://visage.surgeplay.com/full/${findUUID}.png`, (findProfile.slayer_bosses.zombie.xp), all_xp_cap[revL], (findProfile.slayer_bosses.spider.xp), all_xp_cap[tarL], (findProfile.slayer_bosses.wolf.xp), wolf_xp_cap[svenL], (findProfile.slayer_bosses.zombie.xp), (findProfile.slayer_bosses.spider.xp), (findProfile.slayer_bosses.wolf.xp)))
