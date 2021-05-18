@@ -2,8 +2,7 @@
     "main": "app.js",
     "dependencies": {
         "discord.js": "^12.2.0",
-        "dotenv-flow": "^3.1.0",
-        "enmap": "^5.2.4",
+        "dotenv": "^9.0.2",
         "mongoose": "^5.12.10",
         "node-fetch": "^2.6.1"
     }

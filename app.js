@@ -1,6 +1,6 @@
 const { Client, Collection } = require('discord.js')
 const fs = require('fs')
-require('dotenv-flow').config()
+require('dotenv').config()
 
 const client = new Client()
 

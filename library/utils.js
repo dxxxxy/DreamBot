@@ -143,7 +143,6 @@ const utils = {
             .addField(...formatHelp("d!slayers <IGN>", "View slayers"))
             .addField(...formatHelp("d!pets <IGN>", "View pets"))
             .addField(...formatHelp("d!info <IGN>", "View basic info"))
-            .addField(...formatHelp("d!invite", "Invite the bot to your server"))
             .addField(...formatHelp("d!timers", "Timers before events start"))
         return embed
     },
