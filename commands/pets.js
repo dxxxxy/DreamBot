@@ -139,29 +139,29 @@ exports.run = async(client, message, args) => {
     }, 60000)
     if (!args[0]) {
         Register.findOne({
-            userID: message.author.id
+            discordID: message.author.id
         }, async(err, res) => {
             if (!res) return message.channel.send(utils.BasicEmbed("Error", colors.Yellow, "Please register using d!register <IGN>!"))
             if (err) return message.channel.send(utils.BasicEmbed("Error", colors.Red, err))
-            profileArr = await fetch(`https://api.hypixel.net/Skyblock/profiles?key=${process.env.APIKEY}&uuid=${res.userUUID}`)
+            profileArr = await fetch(`https://api.hypixel.net/Skyblock/profiles?key=${process.env.APIKEY}&uuid=${res.minecraftID}`)
                 .then(res2 => res2.json())
                 .then(json => json.profiles)
             Object.keys(profileArr).forEach(profile => {
-                lastSaves.push(profileArr[profile].members[res.userUUID].last_save)
+                lastSaves.push(profileArr[profile].members[res.minecraftID].last_save)
                 profileID.push(profileArr[profile].profile_id)
                 profileName.push(profileArr[profile].cute_name)
             })
             currentProfile = profileID[lastSaves.indexOf(Math.max(...lastSaves))]
             findProfile = await fetch(`https://api.hypixel.net/skyblock/profile?key=${process.env.APIKEY}&profile=${currentProfile}`)
                 .then(res2 => res2.json())
-                .then(json => json.profile.members[res.userUUID])
-            findName = await fetch(`https://api.minetools.eu/uuid/${res.userUUID}`)
+                .then(json => json.profile.members[res.minecraftID])
+            findName = await fetch(`https://api.minetools.eu/uuid/${res.minecraftID}`)
                 .then(res2 => res2.json())
                 .then(json => json.name)
             let embed = new MessageEmbed()
                 .setTitle(`**Pets (${findName} on ${profileName[lastSaves.indexOf(Math.max(...lastSaves))]}**)`)
                 .setColor(colors.Cyan)
-                .setThumbnail(`https://visage.surgeplay.com/full/${res.userUUID}.png`)
+                .setThumbnail(`https://visage.surgeplay.com/full/${res.minecraftID}.png`)
             Object.keys(findProfile.pets).forEach(pet => {
                 totalExp += +findProfile.pets[pet].exp
                 embed.addField(`${(findProfile.pets[pet].type).capitalize()} ${rarity(findProfile.pets[pet])}`, getLvl(expType(findProfile.pets[pet]), findProfile.pets[pet].exp) == 100 ? "**Maxed**" : `**Level ${getLvl(expType(findProfile.pets[pet]), findProfile.pets[pet].exp)}\n${(((((+findProfile.pets[pet].exp) - +expType(findProfile.pets[pet])[getLvl(expType(findProfile.pets[pet]), findProfile.pets[pet].exp) - 1])/(expNtype(findProfile.pets[pet])[getLvl(expType(findProfile.pets[pet]), findProfile.pets[pet].exp)])))*100).toFixed(1)}%** to level ${+getLvl(expType(findProfile.pets[pet]), findProfile.pets[pet].exp)+1}\n**${formatNumbers((+findProfile.pets[pet].exp) - +expType(findProfile.pets[pet])[getLvl(expType(findProfile.pets[pet]), findProfile.pets[pet].exp) - 1])} / ${formatNumbers(expNtype(findProfile.pets[pet])[getLvl(expType(findProfile.pets[pet]), findProfile.pets[pet].exp)])}**`, true)

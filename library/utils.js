@@ -88,7 +88,7 @@ const colors = require("./colors")
 // const utils = {
 //     SkillsEmbed: (name, profile, farmingL, miningL, combatL, foragingL, fishingL, enchantingL, alchemyL, carpentryL, runecraftingL, tamingL, thumbnail, farmingH, farmingN, miningH, miningN, combatH, combatN, foragingH, foragingN, fishingH, fishingN, enchantingH, enchantingN, alchemyH, alchemyN, carpentryH, carpentryN, runecraftingH, runecraftingN, tamingH, tamingN, message) => {
 //         Profile.findOne({
-//             userID: message.author.id
+//             discordID: message.author.id
 //         }, async(err, res) => {
 //             const apiKey = "9151ebae-e860-4346-8913-633317c85b58"
 //             if (err) return message.channel.send(utils.BasicEmbed("Error", colors.Red, err))
@@ -168,16 +168,56 @@ const colors = require("./colors")
 //     CD: 1
 // }
 
+const formatInfo = (emoji, name, body) => [
+    `${emoji} ${name}`,
+    body,
+    true
+]
+
 module.exports = {
-    HelpEmbed: () => {
+    currencyFormat: (n) => {
+        if (n >= 1000000000) n = `${(n/1000000000).toFixed(1)}b` //billions
+        else if (n >= 1000000) n = `${(n/1000000).toFixed(1)}m` //millions
+        else if (n >= 1000) n = `${(n/1000).toFixed(1)}k` //thousands
+        else n.toFixed(1) //hundreds
+        return n
+    },
+    Error: (e) => {
+        return new MessageEmbed()
+            .setTitle("Error")
+            .setDescription(e)
+            .setColor(colors.red)
+    },
+    Warning: (e) => {
+        return new MessageEmbed()
+            .setTitle("Warning")
+            .setDescription(e)
+            .setColor(colors.yellow)
+    },
+    Success: (e) => {
+        return new MessageEmbed()
+            .setTitle("Success")
+            .setDescription(e)
+            .setColor(colors.lime)
+    },
+    Help: () => {
         let desc = ""
         Array.from(client.module.commands).forEach(e => {
             if (e[1][0]) desc += `[\`${process.env.PREFIX + e[0]}\` - \`${process.env.PREFIX + e[1][0]}\`]\n`
         })
-        let embed = new MessageEmbed()
+
+        return new MessageEmbed()
             .setTitle("Help")
             .setDescription(desc)
-            .setColor(colors.Cyan)
-        return embed
+            .setColor(colors.cyan)
+    },
+    Info: (name, profile, thumbnail, fairy, purse, bank) => {
+        return new MessageEmbed()
+            .setTitle(`Info (${name} on ${profile})`)
+            .setColor(colors.cyan)
+            .setThumbnail(thumbnail)
+            .addField(...formatInfo("<:Fairy:725462792206811187>", "Fairy souls", `${fairy}`))
+            .addField(...formatInfo("<:Coins:925691357656412160>", "Purse", `**${module.exports.currencyFormat(purse)}** coins`))
+            .addField(...formatInfo("<:Bank:725463101318889562>", "Bank", `${bank}`))
     }
 }

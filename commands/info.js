@@ -1,75 +1,89 @@
 //i
 const utils = require("../library/utils.js")
-const colors = require("../library/colors.js")
-const Register = require("../models/register.js")
+const colors = require("../library/colors")
+const Register = require("../models/register")
+const data = require("../data.json")
+
 const fetch = (url) =>
     import ("node-fetch").then(({ default: fetch }) => fetch(url))
-const talkedRecently = new Set()
+    // const talkedRecently = new Set()
 
-const formatNumbers = (n) => {
-    let body
-    if (n >= 1000000) {
-        body = `${(n/1000000).toFixed(1)}m`
-    } else if (n >= 1000) {
-        body = `${(n/1000).toFixed(1)}k`
-    } else {
-        body = n.toFixed(1)
-    }
-    return body
-}
-
-exports.run = async(client, message, args) => {
+exports.run = (client, message, args) => {
     var lastSaves = [],
         profileID = [],
         profileName = []
-    if (talkedRecently.has(message.author.id)) return message.channel.send(utils.BasicEmbed("Cooldown", colors.Yellow, "Please wait 1 minute before using this command again!"))
-    talkedRecently.add(message.author.id)
-    setTimeout(() => {
-        talkedRecently.delete(message.author.id)
-    }, utils.CD)
+        // if (talkedRecently.has(message.author.id)) return message.channel.send(utils.BasicEmbed("Cooldown", colors.Yellow, "Please wait 1 minute before using this command again!"))
+        // talkedRecently.add(message.author.id)
+        // setTimeout(() => {
+        //     talkedRecently.delete(message.author.id)
+        // }, utils.CD)
     if (!args[0]) {
+        //search database using discord id
         Register.findOne({
-            userID: message.author.id
-        }, async(err, res) => {
-            if (!res) return message.channel.send(utils.BasicEmbed("Error", colors.Yellow, "Please register using d!register <IGN>!"))
-            if (err) return message.channel.send(utils.BasicEmbed("Error", colors.Red, err))
-            profileArr = await fetch(`https://api.hypixel.net/Skyblock/profiles?key=${process.env.APIKEY}&uuid=${res.userUUID}`)
+            discordID: message.author.id
+        }, (err, res) => {
+            if (!res) return message.channel.send({ embeds: [utils.Error("Please register using d!register <IGN>")] })
+            if (err) return message.channel.send({ embeds: [utils.Error(err)] })
+                //fetch all the profiles in an array
+            fetch(`https://api.hypixel.net/Skyblock/profiles?key=${process.env.APIKEY}&uuid=${res.minecraftID}`)
                 .then(res2 => res2.json())
-                .then(json => json.profiles)
-            Object.keys(profileArr).forEach(profile => {
-                lastSaves.push(profileArr[profile].members[res.userUUID].last_save)
-                profileID.push(profileArr[profile].profile_id)
-                profileName.push(profileArr[profile].cute_name)
-            })
-            currentProfile = profileID[lastSaves.indexOf(Math.max(...lastSaves))]
-            findProfile = await fetch(`https://api.hypixel.net/skyblock/profile?key=${process.env.APIKEY}&profile=${currentProfile}`)
-                .then(res2 => res2.json())
-                .then(json => json.profile)
-            findName = await fetch(`https://api.minetools.eu/uuid/${res.userUUID}`)
-                .then(res2 => res2.json())
-                .then(json => json.name)
-            message.channel.send(utils.InfoEmbed(findName, profileName[lastSaves.indexOf(Math.max(...lastSaves))], `https://visage.surgeplay.com/full/${res.userUUID}.png`, !findProfile.members[res.userUUID].fairy_souls_collected ? "**0 / 227**" : `**${findProfile.members[res.userUUID].fairy_souls_collected} / 227**`, (findProfile.members[res.userUUID].coin_purse).toFixed(1), !findProfile.banking ? "API disabled" : `**${formatNumbers(findProfile.banking.balance)}** coins`))
+                .then(profileArr => {
+                    //cycle through array while saving all lastSaves
+                    Object.keys(profileArr.profiles).forEach(profile => {
+                            lastSaves.push(profileArr.profiles[profile].members[res.minecraftID].last_save)
+                            profileID.push(profileArr.profiles[profile].profile_id)
+                            profileName.push(profileArr.profiles[profile].cute_name)
+                        })
+                        //get last updated array through index
+                    currentProfile = profileID[lastSaves.indexOf(Math.max(...lastSaves))]
+
+                    //get the profile info
+                    fetch(`https://api.hypixel.net/skyblock/profile?key=${process.env.APIKEY}&profile=${currentProfile}`)
+                        .then(res3 => res3.json())
+                        .then(findProfile => {
+                            fetch(`https://api.minetools.eu/uuid/${res.minecraftID}`)
+                                .then(res4 => res4.json())
+                                .then(findName => {
+                                    let user = findProfile.profile.members[res.minecraftID]
+                                    message.channel.send({
+                                        embeds: [utils.Info(findName.name, profileName[lastSaves.indexOf(Math.max(...lastSaves))], `https://visage.surgeplay.com/full/${res.minecraftID}.png`, !user.fairy_souls_collected ? `**0 / ${data.fairySouls}**` : `**${user.fairy_souls_collected} / ${data.fairySouls}**`, user.coin_purse.toFixed(1), !findProfile.profile.banking ? "API disabled" : `**${utils.currencyFormat(findProfile.profile.banking.balance)}** coins`)]
+                                    })
+                                })
+                        })
+                })
         })
     } else {
-        findUUID = await fetch(`https://api.minetools.eu/uuid/${args[0]}`)
-            .then(res2 => res2.json())
-            .then(json => json.id)
-        if (!findUUID) return message.channel.send(utils.BasicEmbed("Error", colors.Red, "This IGN does not exist!"))
-        profileArr = await fetch(`https://api.hypixel.net/Skyblock/profiles?key=${process.env.APIKEY}&uuid=${findUUID}`)
-            .then(res2 => res2.json())
-            .then(json => json.profiles)
-        Object.keys(profileArr).forEach(profile => {
-            lastSaves.push(profileArr[profile].members[findUUID].last_save)
-            profileID.push(profileArr[profile].profile_id)
-            profileName.push(profileArr[profile].cute_name)
-        })
-        currentProfile = profileID[lastSaves.indexOf(Math.max(...lastSaves))]
-        findProfile = await fetch(`https://api.hypixel.net/skyblock/profile?key=${process.env.APIKEY}&profile=${currentProfile}`)
-            .then(res2 => res2.json())
-            .then(json => json.profile)
-        findName = await fetch(`https://api.minetools.eu/uuid/${findUUID}`)
-            .then(res2 => res2.json())
-            .then(json => json.name)
-        message.channel.send(utils.InfoEmbed(findName, profileName[lastSaves.indexOf(Math.max(...lastSaves))], `https://visage.surgeplay.com/full/${findUUID}.png`, !findProfile.members[findUUID].fairy_souls_collected ? "**0 / 209**" : `**${findProfile.members[findUUID].fairy_souls_collected} / 209**`, (findProfile.members[findUUID].coin_purse).toFixed(1), !findProfile.banking ? "API disabled" : `**${formatNumbers(findProfile.banking.balance)}** coins`))
+        fetch(`https://api.minetools.eu/uuid/${args[0]}`)
+            .then(res => res.json())
+            .then(findUUID => {
+                if (!findUUID.id) return message.channel.send({ embeds: [utils.Error("This IGN could not be resolved")] })
+                fetch(`https://api.hypixel.net/Skyblock/profiles?key=${process.env.APIKEY}&uuid=${findUUID.id}`)
+                    .then(res2 => res2.json())
+                    .then(profileArr => {
+                        //cycle through array while saving all lastSaves
+                        Object.keys(profileArr.profiles).forEach(profile => {
+                                lastSaves.push(profileArr.profiles[profile].members[findUUID.id].last_save)
+                                profileID.push(profileArr.profiles[profile].profile_id)
+                                profileName.push(profileArr.profiles[profile].cute_name)
+                            })
+                            //get last updated array through index
+                        currentProfile = profileID[lastSaves.indexOf(Math.max(...lastSaves))]
+
+                        //get the profile info
+                        fetch(`https://api.hypixel.net/skyblock/profile?key=${process.env.APIKEY}&profile=${currentProfile}`)
+                            .then(res3 => res3.json())
+                            .then(findProfile => {
+                                fetch(`https://api.minetools.eu/uuid/${findUUID.id}`)
+                                    .then(res4 => res4.json())
+                                    .then(findName => {
+                                        let user = findProfile.profile.members[findUUID.id]
+                                        message.channel.send({
+                                            embeds: [utils.Info(findName.name, profileName[lastSaves.indexOf(Math.max(...lastSaves))], `https://visage.surgeplay.com/full/${findUUID.id}.png`, !user.fairy_souls_collected ? "**0 / 228**" : `**${user.fairy_souls_collected} / 228**`, (user.coin_purse).toFixed(1), !findProfile.profile.banking ? "API disabled" : `**${utils.currencyFormat(findProfile.profile.banking.balance)}** coins`)]
+                                        })
+                                    })
+                            })
+                    })
+            })
+
     }
 }

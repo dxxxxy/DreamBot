@@ -29,22 +29,22 @@ exports.run = async(client, message, args) => {
     }, utils.CD)
     if (!args[0]) {
         Register.findOne({
-            userID: message.author.id
+            discordID: message.author.id
         }, async(err, res) => {
             if (!res) return message.channel.send(utils.BasicEmbed("Error", colors.Yellow, "Please register using d!register <IGN>!"))
             if (err) return message.channel.send(utils.BasicEmbed("Error", colors.Red, err))
-            profileArr = await fetch(`https://api.hypixel.net/Skyblock/profiles?key=${process.env.APIKEY}&uuid=${res.userUUID}`)
+            profileArr = await fetch(`https://api.hypixel.net/Skyblock/profiles?key=${process.env.APIKEY}&uuid=${res.minecraftID}`)
                 .then(res2 => res2.json())
                 .then(json => json.profiles)
             Object.keys(profileArr).forEach(profile => {
-                lastSaves.push(profileArr[profile].members[res.userUUID].last_save)
+                lastSaves.push(profileArr[profile].members[res.minecraftID].last_save)
                 profileID.push(profileArr[profile].profile_id)
                 profileName.push(profileArr[profile].cute_name)
             })
             currentProfile = profileID[lastSaves.indexOf(Math.max(...lastSaves))]
             findProfile = await fetch(`https://api.hypixel.net/skyblock/profile?key=${process.env.APIKEY}&profile=${currentProfile}`)
                 .then(res2 => res2.json())
-                .then(json => json.profile.members[res.userUUID])
+                .then(json => json.profile.members[res.minecraftID])
             var farmingL = getLvl(all_xp_cap, Math.floor(findProfile.experience_skill_farming)),
                 miningL = getLvl(all_xp_cap, Math.floor(findProfile.experience_skill_mining)),
                 combatL = getLvl(all_xp_cap, Math.floor(findProfile.experience_skill_combat)),
@@ -56,10 +56,10 @@ exports.run = async(client, message, args) => {
                 runecraftingL = getLvl(runecrafting_xp_cap, Math.floor(findProfile.experience_skill_runecrafting)),
                 tamingL = getLvl(all_xp_cap, Math.floor(findProfile.experience_skill_taming))
             if (!farmingL && !miningL && !combatL && !foragingL && !fishingL && !enchantingL && !alchemyL && !carpentryL && !runecraftingL && !tamingL) return message.channel.send(utils.BasicEmbed("Error", colors.Red, "Please enable your api!"))
-            findName = await fetch(`https://api.minetools.eu/uuid/${res.userUUID}`)
+            findName = await fetch(`https://api.minetools.eu/uuid/${res.minecraftID}`)
                 .then(res2 => res2.json())
                 .then(json => json.name)
-            utils.SkillsEmbed(findName, profileName[lastSaves.indexOf(Math.max(...lastSaves))], farmingL, miningL, combatL, foragingL, fishingL, enchantingL, alchemyL, carpentryL, runecraftingL, tamingL, `https://visage.surgeplay.com/full/${res.userUUID}.png`, (Math.floor(findProfile.experience_skill_farming - all_xp_cap[farmingL - 1])), (all_xp_need[farmingL]), (Math.floor(findProfile.experience_skill_mining - all_xp_cap[miningL - 1])), (all_xp_need[miningL]), (Math.floor(findProfile.experience_skill_combat - all_xp_cap[combatL - 1])), (all_xp_need[combatL]), (Math.floor(findProfile.experience_skill_foraging - all_xp_cap[foragingL - 1])), (all_xp_need[foragingL]), (Math.floor(findProfile.experience_skill_fishing - all_xp_cap[fishingL - 1])), (all_xp_need[fishingL]), (Math.floor(findProfile.experience_skill_enchanting - all_xp_cap[enchantingL - 1])), (all_xp_need[enchantingL]), (Math.floor(findProfile.experience_skill_alchemy - all_xp_cap[alchemyL - 1])), (all_xp_need[alchemyL]), (Math.floor(findProfile.experience_skill_carpentry - all_xp_cap[carpentryL - 1])), (all_xp_need[carpentryL]), (Math.floor(findProfile.experience_skill_runecrafting - runecrafting_xp_cap[runecraftingL - 1])), (runecrafting_xp_need[runecraftingL]), (Math.floor(findProfile.experience_skill_taming - all_xp_cap[tamingL - 1])), (all_xp_need[tamingL]), message)
+            utils.SkillsEmbed(findName, profileName[lastSaves.indexOf(Math.max(...lastSaves))], farmingL, miningL, combatL, foragingL, fishingL, enchantingL, alchemyL, carpentryL, runecraftingL, tamingL, `https://visage.surgeplay.com/full/${res.minecraftID}.png`, (Math.floor(findProfile.experience_skill_farming - all_xp_cap[farmingL - 1])), (all_xp_need[farmingL]), (Math.floor(findProfile.experience_skill_mining - all_xp_cap[miningL - 1])), (all_xp_need[miningL]), (Math.floor(findProfile.experience_skill_combat - all_xp_cap[combatL - 1])), (all_xp_need[combatL]), (Math.floor(findProfile.experience_skill_foraging - all_xp_cap[foragingL - 1])), (all_xp_need[foragingL]), (Math.floor(findProfile.experience_skill_fishing - all_xp_cap[fishingL - 1])), (all_xp_need[fishingL]), (Math.floor(findProfile.experience_skill_enchanting - all_xp_cap[enchantingL - 1])), (all_xp_need[enchantingL]), (Math.floor(findProfile.experience_skill_alchemy - all_xp_cap[alchemyL - 1])), (all_xp_need[alchemyL]), (Math.floor(findProfile.experience_skill_carpentry - all_xp_cap[carpentryL - 1])), (all_xp_need[carpentryL]), (Math.floor(findProfile.experience_skill_runecrafting - runecrafting_xp_cap[runecraftingL - 1])), (runecrafting_xp_need[runecraftingL]), (Math.floor(findProfile.experience_skill_taming - all_xp_cap[tamingL - 1])), (all_xp_need[tamingL]), message)
         })
     } else {
         findUUID = await fetch(`https://api.minetools.eu/uuid/${args[0]}`)

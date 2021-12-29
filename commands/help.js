@@ -1,7 +1,9 @@
 //h
-const utils = require("../library/utils.js")
-const colors = require("../library/colors.js")
+const utils = require("../library/utils")
+const colors = require("../library/colors")
 
-exports.run = async(client, message, args) => {
-    message.channel.send({ embeds: [utils.HelpEmbed()] })
+exports.run = (client, message, args) => {
+    message.channel.send({
+        embeds: [utils.Help()]
+    })
 }

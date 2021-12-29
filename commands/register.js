@@ -15,13 +15,13 @@ exports.run = async(client, message, args) => {
         })
     if (!uuid) return message.channel.send(utils.BasicEmbed("Error", colors.Red, "The name that you entered does not exist"))
     Register.findOne({
-        userID: message.author.id
+        discordID: message.author.id
     }, (err, res) => {
         if (err) message.channel.send(utils.BasicEmbed("Error", colors.Red, err))
         if (!res) {
             const newRegister = new Register({
-                userID: message.author.id,
-                userUUID: uuid,
+                discordID: message.author.id,
+                minecraftID: uuid,
             })
             message.channel.send(utils.BasicEmbed("Success", colors.Green, "You have been registered!"))
             return newRegister.save()
