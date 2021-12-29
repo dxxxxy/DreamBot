@@ -9,16 +9,17 @@ exports.run = async(client, message, args) => {
 
     if (!args[0]) {
         //if no args get uuid from database
-        Register.findOne({ discordID: message.author.id }, (err, res) => {
+        await Register.findOne({ discordID: message.author.id }, async(err, res) => {
             if (!res) return message.channel.send({ embeds: [utils.Register()] })
             if (err) return message.channel.send({ embeds: [utils.Error(err)] })
-            minecraftID = res.minecraftID
-        })
+            minecraftID = await res.minecraftID
+        }).clone()
     } else {
         //else get uuid from name
         minecraftID = await (await get(`https://api.minetools.eu/uuid/${args[0]}`)).data.id
     }
 
+    console.log(minecraftID)
     if (!minecraftID) return message.channel.send({ embeds: [utils.Error("This IGN could not be resolved")] })
 
     //get profile
@@ -28,7 +29,7 @@ exports.run = async(client, message, args) => {
     let profile = await (await get(`https://api.hypixel.net/skyblock/profile?key=${process.env.APIKEY}&profile=${utils.getLatestProfile(profiles, minecraftID)[0].profile_id}`)).data.profile
 
     //get user name from uuid or from query
-    let name = args[0].capitalize ? args[0] : await (await get(`https://api.minetools.eu/uuid/${minecraftID}`)).data.name
+    let name = args[0] ? args[0] : await (await get(`https://api.minetools.eu/uuid/${minecraftID}`)).data.name
 
     //get user data from profile
     let user = profile.members[minecraftID]
