@@ -1,19 +1,17 @@
 const mongoose = require("mongoose")
+const package = require("../package.json")
+
 
 module.exports = async(client) => {
-    mongoose.connect(process.env.DATABASE, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false })
-    mongoose.connection.on('connected', () => {
-        console.log('Mongoose connection successfully opened!')
-    })
+    console.log(`Client ${client.user.tag}`)
 
-    mongoose.connection.on('err', err => {
-        console.error(`Mongoose connection error: \n ${err.stack}`)
-    })
+    //database connection
+    mongoose.connect(process.env.DATABASE)
+    mongoose.connection.on("connected", () => console.log("Mongoose connection successfully opened!"))
+    mongoose.connection.on("err", err => console.error(`Mongoose connection error:\n${err.stack}`))
+    mongoose.connection.on("disconnected", () => console.log("Mongoose connection disconnected"))
 
-    mongoose.connection.on('disconnected', () => {
-        console.log('Mongoose connection disconnected')
-    })
-    console.log(`Logged in as ${client.user.tag}!`)
-    client.user.setActivity(`over ${client.users.cache.size - 1} users | v1.3`, { type: "WATCHING" })
-    setInterval(() => { client.user.setActivity(`over ${client.users.cache.size-1} users | v1.3`, { type: "WATCHING" }) }, 60000)
+    //status
+    client.user.setActivity(`over ${client.users.cache.size}u | ${client.guilds.cache.size}g | v${package.version}`, { type: "WATCHING" }) //call first time immediately
+    setInterval(() => { client.user.setActivity(`over ${client.users.cache.size}u | ${client.guilds.cache.size}g | v${package.version}`, { type: "WATCHING" }) }, 30000) //then update it every 30s
 }

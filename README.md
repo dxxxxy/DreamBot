@@ -10,7 +10,7 @@ An open source hypixel skyblock stats discord bot `developped by DxxxxY#5818`. F
 ## Features
 > Please take note that [] means required while <> means optional (arguments)
 - `d!help` - Shows all commands.
-- `d!register [IGN]` - Register your name so that subsequent commands don't need your name.
+- `d!register [IGN]` - Register your name so that subsequent commands don"t need your name.
 - `d!timers` - Shows timers for events
 > The following commands will display a players stat if given a name. If no name is given and you are registered, you will be displayed your own stats.
 - `d!skills <IGN>` - Shows skills

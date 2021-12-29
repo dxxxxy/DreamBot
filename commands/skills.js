@@ -1,7 +1,9 @@
+//sk
 const utils = require("../library/utils.js")
 const colors = require("../library/colors.js")
 const Register = require("../models/register.js")
-const fetch = require("node-fetch")
+const fetch = (url) =>
+    import ("node-fetch").then(({ default: fetch }) => fetch(url))
 const talkedRecently = new Set()
 const all_xp_cap = [50, 175, 375, 675, 1175, 1925, 2925, 4425, 6425, 9925, 14925, 22425, 32425, 47425, 67425, 97425, 147425, 222425, 322425, 522425, 822425, 1222425, 1722425, 2322425, 3022425, 3822425, 4722425, 5722425, 6822425, 8022425, 9322425, 10722425, 12222425, 13822425, 15522425, 17322425, 19222425, 21222425, 23322425, 25522425, 27822425, 30222425, 32722425, 35322425, 38072425, 40972425, 44072425, 47472245, 51172245, 55172245]
 const runecrafting_xp_cap = [50, 150, 275, 435, 635, 885, 1200, 1600, 2100, 2725, 3510, 4510, 5760, 7325, 9325, 11825, 14950, 18950, 23950, 30200, 38050, 47850, 60100, 75400, 75401]
@@ -21,7 +23,7 @@ exports.run = async(client, message, args) => {
         profileID = [],
         profileName = []
     if (talkedRecently.has(message.author.id)) return message.channel.send(utils.BasicEmbed("Cooldown", colors.Yellow, "Please wait 1 minute before using this command again!"))
-    talkedRecently.add(message.author.id);
+    talkedRecently.add(message.author.id)
     setTimeout(() => {
         talkedRecently.delete(message.author.id)
     }, utils.CD)

@@ -1,7 +1,9 @@
+//sl
 const utils = require("../library/utils.js")
 const colors = require("../library/colors.js")
 const Register = require("../models/register.js")
-const fetch = require("node-fetch")
+const fetch = (url) =>
+    import ("node-fetch").then(({ default: fetch }) => fetch(url))
 const talkedRecently = new Set()
 const all_xp_cap = [5, 15, 200, 1000, 5000, 20000, 100000, 400000, 1000000]
 const wolf_xp_cap = [10, 25, 250, 1500, 5000, 20000, 100000, 400000, 1000000]
@@ -17,7 +19,7 @@ exports.run = async(client, message, args) => {
         profileID = [],
         profileName = []
     if (talkedRecently.has(message.author.id)) return message.channel.send(utils.BasicEmbed("Cooldown", colors.Yellow, "Please wait 1 minute before using this command again!"))
-    talkedRecently.add(message.author.id);
+    talkedRecently.add(message.author.id)
     setTimeout(() => {
         talkedRecently.delete(message.author.id)
     }, utils.CD)

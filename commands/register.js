@@ -1,6 +1,8 @@
+//r
 const utils = require("../library/utils.js")
 const colors = require("../library/colors.js")
-const fetch = require("node-fetch")
+const fetch = (url) =>
+    import ("node-fetch").then(({ default: fetch }) => fetch(url))
 const Register = require("../models/register.js")
 
 exports.run = async(client, message, args) => {

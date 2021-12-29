@@ -1,11 +1,13 @@
+//t
 const utils = require("../library/utils.js")
 const colors = require("../library/colors.js")
-const fetch = require("node-fetch")
+const fetch = (url) =>
+    import ("node-fetch").then(({ default: fetch }) => fetch(url))
 const talkedRecently = new Set()
 
 exports.run = async(client, message, args) => {
     if (talkedRecently.has(message.author.id)) return message.channel.send(utils.BasicEmbed("Cooldown", colors.Yellow, "Please wait 1 minute before using this command again!"))
-    talkedRecently.add(message.author.id);
+    talkedRecently.add(message.author.id)
     setTimeout(() => {
         talkedRecently.delete(message.author.id)
     }, utils.CD)
