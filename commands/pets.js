@@ -9,15 +9,16 @@ exports.run = async(client, message, args) => {
     if (!args[0]) {
         //if no args get uuid from database
         Register.findOne({ discordID: message.author.id }, (err, res) => {
-            if (!res) return message.channel.send({ embeds: [utils.Error("Please register using d!register <IGN>")] })
+            if (!res) return message.channel.send({ embeds: [utils.Register()] })
             if (err) return message.channel.send({ embeds: [utils.Error(err)] })
             minecraftID = res.minecraftID
         })
     } else {
         //else get uuid from name
         minecraftID = await (await get(`https://api.minetools.eu/uuid/${args[0]}`)).data.id
-        if (!minecraftID) return message.channel.send({ embeds: [utils.Error("This IGN could not be resolved")] })
     }
+
+    if (!minecraftID) return message.channel.send({ embeds: [utils.Error("This IGN could not be resolved")] })
 
     //get profile
     let profiles = await (await get(`https://api.hypixel.net/skyblock/profiles?key=${process.env.APIKEY}&uuid=${minecraftID}`)).data.profiles

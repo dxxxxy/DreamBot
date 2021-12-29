@@ -184,6 +184,7 @@ module.exports = {
         let totalExp = 0,
             fishMilestone,
             mineMilestone
+            //get pets stats
         Object.keys(pets).forEach(pet => {
             totalExp += pets[pet].exp
             let petField
@@ -198,11 +199,8 @@ module.exports = {
                 }
             }
             if (petField == undefined) petField = "**Maxed**"
-            embed.addField(pets[pet].type.capitalize(), petField, true)
-
-            //get lvl from exp and add as field
-            //get % progress to next level
-            //display exp / needed
+                //add info as field
+            embed.addField(`${JSON.parse(JSON.stringify(data))[pets[pet].tier]} ${pets[pet].type.capitalize()}`, petField, true)
         })
 
         //fishing milestone
@@ -226,5 +224,11 @@ module.exports = {
         if (mineMilestone == undefined) mineMilestone = "Maxed (Legendary)" //if maxed
         embed.setDescription(`Total Exp: **${module.exports.currencyFormat(totalExp)}**\nFishing Milestone: **${fishMilestone}**\nMining Milestone: **${mineMilestone}**`)
         return embed
+    },
+    Register: () => {
+        return new MessageEmbed()
+            .setTitle("Not registered")
+            .setColor(colors.yellow)
+            .setDescription(`Please register using ${process.env.PREFIX}register <ign>`)
     }
 }
