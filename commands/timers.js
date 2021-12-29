@@ -1,8 +1,7 @@
 //t
 const utils = require("../library/utils.js")
 const colors = require("../library/colors.js")
-const fetch = (url) =>
-    import ("node-fetch").then(({ default: fetch }) => fetch(url))
+const { get } = require("axios").default
 const talkedRecently = new Set()
 
 exports.run = async(client, message, args) => {

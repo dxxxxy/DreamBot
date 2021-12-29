@@ -1,8 +1,7 @@
 //r
 const utils = require("../library/utils.js")
 const colors = require("../library/colors.js")
-const fetch = (url) =>
-    import ("node-fetch").then(({ default: fetch }) => fetch(url))
+const { get } = require("axios").default
 const Register = require("../models/register.js")
 
 exports.run = async(client, message, args) => {

@@ -2,8 +2,7 @@
 const utils = require("../library/utils.js")
 const colors = require("../library/colors.js")
 const Register = require("../models/register.js")
-const fetch = (url) =>
-    import ("node-fetch").then(({ default: fetch }) => fetch(url))
+const { get } = require("axios").default
 const talkedRecently = new Set()
 const all_xp_cap = [5, 15, 200, 1000, 5000, 20000, 100000, 400000, 1000000]
 const wolf_xp_cap = [10, 25, 250, 1500, 5000, 20000, 100000, 400000, 1000000]

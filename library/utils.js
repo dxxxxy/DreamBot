@@ -1,14 +1,7 @@
-// const Discord = require("discord.js")
-// const colors = require("../library/colors.js")
-// const Profile = require("../models/register.js")
-// const fetch = (url) =>
-//     import ("node-fetch").then(({ default: fetch }) => fetch(url))
-// const all_xp_cap = [5, 15, 200, 1000, 5000, 20000, 100000, 400000, 1000000]
-// const wolf_xp_cap = [10, 25, 250, 1500, 5000, 20000, 100000, 400000, 1000000]
-
 const { MessageEmbed } = require("discord.js")
-const client = require("../app.js")
+const client = require("../app")
 const colors = require("./colors")
+const data = require("../data.json")
 
 // const formatSkills = (emoji, name, l_value, h_value, n_value, m_value, message) => {
 //     let body
@@ -59,32 +52,6 @@ const colors = require("./colors")
 //     true
 // ]
 
-// const formatNumbers = (n) => {
-//     let body
-//     if (n >= 1000000000) {
-//         body = `${(n/1000000000).toFixed(1)}b`
-//     } else if (n >= 1000000) {
-//         body = `${(n/1000000).toFixed(1)}m`
-//     } else if (n >= 1000) {
-//         body = `${(n/1000).toFixed(1)}k`
-//     } else {
-//         body = n
-//     }
-//     return body
-// }
-
-// const formatNumbers2 = (n) => {
-//     let body
-//     if (n >= 1000000) {
-//         body = `${(n/1000000)}m`
-//     } else if (n >= 1000) {
-//         body = `${(n/1000)}k`
-//     } else {
-//         body = n
-//     }
-//     return body
-// }
-
 // const utils = {
 //     SkillsEmbed: (name, profile, farmingL, miningL, combatL, foragingL, fishingL, enchantingL, alchemyL, carpentryL, runecraftingL, tamingL, thumbnail, farmingH, farmingN, miningH, miningN, combatH, combatN, foragingH, foragingN, fishingH, fishingN, enchantingH, enchantingN, alchemyH, alchemyN, carpentryH, carpentryN, runecraftingH, runecraftingN, tamingH, tamingN, message) => {
 //         Profile.findOne({
@@ -121,36 +88,6 @@ const colors = require("./colors")
 //             .addField(...formatSlayers("<:Sven:719599241856548904>", "Sven", svenL, svenH, svenN, 9))
 //         return embed
 //     },
-//     InfoEmbed: (name, profile, thumbnail, fairy, purse, bank) => {
-//         let embed = new Discord.MessageEmbed()
-//             .setTitle(`**Info (${name} on ${profile})**`)
-//             .setColor(colors.Cyan)
-//             .setThumbnail(thumbnail)
-//             .addField(...formatInfo("<:Fairy:725462792206811187>", "Fairy souls", `${fairy}`))
-//             .addField(...formatInfo("<:Purse:725463522858762241>", "Purse", `**${formatNumbers(purse)}** coins`))
-//             .addField(...formatInfo("<:Bank:725463101318889562>", "Bank", `${bank}`))
-//         return embed
-//     },
-//     BasicEmbed: (title, color, desc) => {
-//         let embed = new Discord.MessageEmbed()
-//             .setTitle(`**${title}**`)
-//             .setColor(color)
-//             .setDescription(desc)
-//         return embed
-//     },
-//     HelpEmbed: () => {
-//         let embed = new Discord.MessageEmbed()
-//             .setTitle("**Help**")
-//             .setColor(colors.Cyan)
-//             .setDescription("Please take note that **[] means required**, while **<> means optional**. To use commands without **<>**, please register yourself with the command **d!register**.")
-//             .addField(...formatHelp("d!register [IGN]", "Register your name"))
-//             .addField(...formatHelp("d!skills <IGN>", "View skills"))
-//             .addField(...formatHelp("d!slayers <IGN>", "View slayers"))
-//             .addField(...formatHelp("d!pets <IGN>", "View pets"))
-//             .addField(...formatHelp("d!info <IGN>", "View basic info"))
-//             .addField(...formatHelp("d!timers", "Timers before events start"))
-//         return embed
-//     },
 //     TimersEmbed: (tz, soj, sf, da, mb, bi, ny) => {
 //         let embed = new Discord.MessageEmbed()
 //             .setTitle("**Timers**")
@@ -164,8 +101,7 @@ const colors = require("./colors")
 //             .addField(...formatTimers("<:New:728734341714411590>", "New Year", ny))
 //             .setFooter("Thanks to InventiveTalent for the API")
 //         return embed
-//     },
-//     CD: 1
+//     }
 // }
 
 const formatInfo = (emoji, name, body) => [
@@ -174,6 +110,10 @@ const formatInfo = (emoji, name, body) => [
     true
 ]
 
+String.prototype.capitalize = function() {
+    return this.toLowerCase().replace(/_/g, " ").replace(/(^|\s)([a-z])/g, function(m, p1, p2) { return p1 + p2.toUpperCase() })
+}
+
 module.exports = {
     currencyFormat: (n) => {
         if (n >= 1000000000) n = `${(n/1000000000).toFixed(1)}b` //billions
@@ -181,6 +121,21 @@ module.exports = {
         else if (n >= 1000) n = `${(n/1000).toFixed(1)}k` //thousands
         else n.toFixed(1) //hundreds
         return n
+    },
+    percentFormat: (n) => {
+        return (n * 100).toFixed() + "%"
+    },
+    getLatestProfile: (profiles, uuid) => {
+        let lastSaves = [],
+            profilesArr = [],
+            profileNames = []
+        Object.keys(profiles).forEach(profile => {
+                lastSaves.push(profiles[profile].members[uuid].last_save)
+                profilesArr.push(profiles[profile])
+                profileNames.push(profiles[profile].cute_name)
+            })
+            //get last updated array through index
+        return [profilesArr[lastSaves.indexOf(Math.max(...lastSaves))], profileNames[lastSaves.indexOf(Math.max(...lastSaves))]]
     },
     Error: (e) => {
         return new MessageEmbed()
@@ -216,8 +171,60 @@ module.exports = {
             .setTitle(`Info (${name} on ${profile})`)
             .setColor(colors.cyan)
             .setThumbnail(thumbnail)
-            .addField(...formatInfo("<:Fairy:725462792206811187>", "Fairy souls", `${fairy}`))
-            .addField(...formatInfo("<:Coins:925691357656412160>", "Purse", `**${module.exports.currencyFormat(purse)}** coins`))
-            .addField(...formatInfo("<:Bank:725463101318889562>", "Bank", `${bank}`))
+            .addField(...formatInfo(data.fairyEmoji, "Fairy souls", `${fairy}`))
+            .addField(...formatInfo(data.coinEmoji, "Purse", `**${module.exports.currencyFormat(purse)}** coins`))
+            .addField(...formatInfo(data.bankEmoji, "Bank", `${bank}`))
+    },
+    Pets: (name, profile, thumbnail, pets, stats) => {
+        let embed = new MessageEmbed()
+            .setTitle(`Pets (${name} on ${profile})`)
+            .setColor(colors.cyan)
+            .setThumbnail(thumbnail)
+
+        let totalExp = 0,
+            fishMilestone,
+            mineMilestone
+        Object.keys(pets).forEach(pet => {
+            totalExp += pets[pet].exp
+            let petField
+            let cumu = JSON.parse(JSON.stringify(data))[`expCumu${pets[pet].tier}`]
+            let need = JSON.parse(JSON.stringify(data))[`expNeed${pets[pet].tier}`]
+            for (let x in cumu) {
+                if (pets[pet].exp < cumu[x]) {
+                    petField = `Level **${x}**
+                    **${module.exports.percentFormat((pets[pet].exp - cumu[x - 1]) / need[x])}** to level **${+x + 1}**
+                    **${module.exports.currencyFormat(pets[pet].exp - cumu[x - 1])}** / **${module.exports.currencyFormat(need[x])}**`
+                    break
+                }
+            }
+            if (petField == undefined) petField = "**Maxed**"
+            embed.addField(pets[pet].type.capitalize(), petField, true)
+
+            //get lvl from exp and add as field
+            //get % progress to next level
+            //display exp / needed
+        })
+
+        //fishing milestone
+        for (let x in data.milestoneFish) {
+            if (stats.pet_milestone_sea_creatures_killed < data.milestoneFish[x]) {
+                fishMilestone = `${stats.pet_milestone_sea_creatures_killed} / ${data.milestoneFish[x]} (${data.milestoneTier[x]})`
+                break
+            }
+        }
+
+        //mining milestone
+        for (let x in data.milestoneMine) {
+            if (stats.pet_milestone_ores_mined < data.milestoneMine[x]) {
+                mineMilestone = `${stats.pet_milestone_ores_mined} / ${data.milestoneMine[x]} (${data.milestoneTier[x]})`
+                break
+            }
+        }
+
+        //formatting
+        if (fishMilestone == undefined) fishMilestone = "Maxed (Legendary)" //if maxed
+        if (mineMilestone == undefined) mineMilestone = "Maxed (Legendary)" //if maxed
+        embed.setDescription(`Total Exp: **${module.exports.currencyFormat(totalExp)}**\nFishing Milestone: **${fishMilestone}**\nMining Milestone: **${mineMilestone}**`)
+        return embed
     }
 }
