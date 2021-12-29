@@ -1,4 +1,6 @@
 # DreamBot
+### Recode currently in progress, for the old bot, visit [DreamBot/legacy](https://github.com/DxxxxY/DreamBot/tree/legacy)<hr>
+
 An open source hypixel skyblock stats discord bot `developped by DxxxxY#5818`. Featuring simple, clean yet elegant embed messages with custom emojis integration.
 
 ## Instructions
