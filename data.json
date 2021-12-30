@@ -24,5 +24,13 @@
     "UNCOMMON": "<:Uncommon:925868262011584552>",
     "RARE": "<:Rare:925868280147759165>",
     "EPIC": "<:Epic:925868300641124403>",
-    "LEGENDARY": "<:Legendary:925868326448693308>"
+    "LEGENDARY": "<:Legendary:925868326448693308>",
+
+    "zoo": "<:Zoo:728734342305677443>",
+    "winterEvent": "<:Jerry:728734342276317224>",
+    "spookyFestival": "<:Spooky:728734342313934928>",
+    "darkAuction": "<:Dark:728734342796279818>",
+    "magmaBoss": "<:Magma:728734341785452656>",
+    "bankInterest": "<:Interest:728734341772869708>",
+    "newYear": "<:New:728734341714411590>"
 }

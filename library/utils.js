@@ -34,24 +34,6 @@ const data = require("../data.json")
 //     ]
 // }
 
-// const formatInfo = (emoji, name, body) => [
-//     `${emoji} ${name}`,
-//     body,
-//     true
-// ]
-
-// const formatHelp = (name, expl) => [
-//     name,
-//     expl,
-//     true
-// ]
-
-// const formatTimers = (emoji, name, body) => [
-//     `${emoji} ${name}`,
-//     `**${body}**`,
-//     true
-// ]
-
 // const utils = {
 //     SkillsEmbed: (name, profile, farmingL, miningL, combatL, foragingL, fishingL, enchantingL, alchemyL, carpentryL, runecraftingL, tamingL, thumbnail, farmingH, farmingN, miningH, miningN, combatH, combatN, foragingH, foragingN, fishingH, fishingN, enchantingH, enchantingN, alchemyH, alchemyN, carpentryH, carpentryN, runecraftingH, runecraftingN, tamingH, tamingN, message) => {
 //         Profile.findOne({
@@ -88,30 +70,13 @@ const data = require("../data.json")
 //             .addField(...formatSlayers("<:Sven:719599241856548904>", "Sven", svenL, svenH, svenN, 9))
 //         return embed
 //     },
-//     TimersEmbed: (tz, soj, sf, da, mb, bi, ny) => {
-//         let embed = new Discord.MessageEmbed()
-//             .setTitle("**Timers**")
-//             .setColor(colors.Cyan)
-//             .addField(...formatTimers("<:Zoo:728734342305677443>", "Travelling Zoo", tz))
-//             .addField(...formatTimers("<:Jerry:728734342276317224>", "Season of Jerry", soj))
-//             .addField(...formatTimers("<:Spooky:728734342313934928>", "Spooky Festival", sf))
-//             .addField(...formatTimers("<:Dark:728734342796279818>", "Dark Auction", da))
-//             .addField(...formatTimers("<:Magma:728734341785452656>", "Magma Boss", mb))
-//             .addField(...formatTimers("<:Interest:728734341772869708>", "Bank Interest", bi))
-//             .addField(...formatTimers("<:New:728734341714411590>", "New Year", ny))
-//             .setFooter("Thanks to InventiveTalent for the API")
-//         return embed
-//     }
 // }
-
-const formatInfo = (emoji, name, body) => [
-    `${emoji} ${name}`,
-    body,
-    true
-]
-
 String.prototype.capitalize = function() {
     return this.toLowerCase().replace(/_/g, " ").replace(/(^|\s)([a-z])/g, function(m, p1, p2) { return p1 + p2.toUpperCase() })
+}
+
+Object.prototype.nameOf = function() {
+    return this.toString().replace(/[ |\(\)=>]/g, '');
 }
 
 module.exports = {
@@ -171,9 +136,9 @@ module.exports = {
             .setTitle(`Info (${name} on ${profile})`)
             .setColor(colors.cyan)
             .setThumbnail(thumbnail)
-            .addField(...formatInfo(data.fairyEmoji, "Fairy souls", `${fairy}`))
-            .addField(...formatInfo(data.coinEmoji, "Purse", `**${module.exports.currencyFormat(purse)}** coins`))
-            .addField(...formatInfo(data.bankEmoji, "Bank", `${bank}`))
+            .addField(`${data.fairyEmoji} Fairy souls`, `${fairy}`, true)
+            .addField(`${data.coinEmoji} Purse`, `**${module.exports.currencyFormat(purse)}** coins`, true)
+            .addField(`${data.bankEmoji} Bank`, `${bank}`, true)
     },
     Pets: (name, profile, thumbnail, pets, stats) => {
         let embed = new MessageEmbed()
@@ -230,5 +195,17 @@ module.exports = {
             .setTitle("Not registered")
             .setColor(colors.yellow)
             .setDescription(`Please register using ${process.env.PREFIX}register <ign>`)
+    },
+    Timers: (timerArray) => {
+        let embed = new MessageEmbed()
+            .setTitle("Timers")
+            .setColor(colors.cyan)
+            .setFooter({ text: "Thanks to InventiveTalent for the API", iconURL: "https://avatars.githubusercontent.com/u/6525296?v=4" })
+            //"Thanks to InventiveTalent for the API", "https://avatars.githubusercontent.com/u/6525296?v=4"
+        timerArray.forEach(timer => {
+            let name = timer.type.replace(/[A-Z-_\&](?=[a-z0-9]+)|[A-Z-_\&]+(?![a-z0-9])/g, ' $&').trim().capitalize()
+            embed.addField(`${JSON.parse(JSON.stringify(data))[timer.type]} ${name}`, `**${timer.estimateRelative}**`, true)
+        })
+        return embed
     }
 }

@@ -1,35 +1,19 @@
 //t
-const utils = require("../library/utils.js")
-const colors = require("../library/colors.js")
+const utils = require("../library/utils")
 const { get } = require("axios").default
-const talkedRecently = new Set()
 
 exports.run = async(client, message, args) => {
-    if (talkedRecently.has(message.author.id)) return message.channel.send(utils.BasicEmbed("Cooldown", colors.Yellow, "Please wait 1 minute before using this command again!"))
-    talkedRecently.add(message.author.id)
-    setTimeout(() => {
-        talkedRecently.delete(message.author.id)
-    }, utils.CD)
-    tz = await fetch("https://hypixel-api.inventivetalent.org/api/skyblock/zoo/estimate")
-        .then(res2 => res2.json())
-        .then(json => json.estimateRelative)
-    soj = await fetch("https://hypixel-api.inventivetalent.org/api/skyblock/winter/estimate")
-        .then(res2 => res2.json())
-        .then(json => json.estimateRelative)
-    sf = await fetch("https://hypixel-api.inventivetalent.org/api/skyblock/spookyFestival/estimate")
-        .then(res2 => res2.json())
-        .then(json => json.estimateRelative)
-    da = await fetch("https://hypixel-api.inventivetalent.org/api/skyblock/darkauction/estimate")
-        .then(res2 => res2.json())
-        .then(json => json.estimateRelative)
-    mb = await fetch("https://hypixel-api.inventivetalent.org/api/skyblock/bosstimer/magma/estimatedSpawn")
-        .then(res2 => res2.json())
-        .then(json => json.estimateRelative)
-    bi = await fetch("https://hypixel-api.inventivetalent.org/api/skyblock/bank/interest/estimate")
-        .then(res2 => res2.json())
-        .then(json => json.estimateRelative)
-    ny = await fetch("https://hypixel-api.inventivetalent.org/api/skyblock/newyear/estimate")
-        .then(res2 => res2.json())
-        .then(json => json.estimateRelative)
-    message.channel.send(utils.TimersEmbed(tz, soj, sf, da, mb, bi, ny))
+    //inventivetalent api timers
+    let zoo = await (await get("https://hypixel-api.inventivetalent.org/api/skyblock/zoo/estimate")).data
+    let jerry = await (await get("https://hypixel-api.inventivetalent.org/api/skyblock/winter/estimate")).data
+    let spooky = await (await get("https://hypixel-api.inventivetalent.org/api/skyblock/spookyFestival/estimate")).data
+    let auction = await (await get("https://hypixel-api.inventivetalent.org/api/skyblock/darkauction/estimate")).data
+    let magma = await (await get("https://hypixel-api.inventivetalent.org/api/skyblock/bosstimer/magma/estimatedSpawn")).data
+    let interest = await (await get("https://hypixel-api.inventivetalent.org/api/skyblock/bank/interest/estimate")).data
+    let newyear = await (await get("https://hypixel-api.inventivetalent.org/api/skyblock/newyear/estimate")).data
+
+    //send res
+    message.channel.send({
+        embeds: [utils.Timers([zoo, jerry, spooky, auction, magma, interest, newyear])]
+    })
 }

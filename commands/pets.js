@@ -18,7 +18,6 @@ exports.run = async(client, message, args) => {
         minecraftID = await (await get(`https://api.minetools.eu/uuid/${args[0]}`)).data.id
     }
 
-    console.log(minecraftID)
     if (!minecraftID) return message.channel.send({ embeds: [utils.Error("This IGN could not be resolved")] })
 
     //get profile
