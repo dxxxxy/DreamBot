@@ -36,6 +36,6 @@ exports.run = async(client, message, args) => {
     //send res
     message.channel.send({
         //cant get cute_name from profile because hypixel is dumb so i have to get the second element of the array and iterate again sigh -> utils.getLatestProfile(profiles, minecraftID)[1]
-        embeds: [utils.Info(name, utils.getLatestProfile(profiles, minecraftID)[1], `https://visage.surgeplay.com/full/${minecraftID}.png`, !user.fairy_souls_collected ? `**0 / ${data.fairySouls}**` : `**${user.fairy_souls_collected} / ${data.fairySouls}**`, user.coin_purse.toFixed(1), !profile.banking ? "API disabled" : `**${utils.currencyFormat(profile.banking.balance)}** coins`)]
+        embeds: [utils.Info(name, utils.getLatestProfile(profiles, minecraftID)[1], `https://visage.surgeplay.com/full/${minecraftID}.png`, !user.fairy_souls_collected ? `**0 / ${data.fairySouls}**` : `**${user.fairy_souls_collected} / ${data.fairySouls}**`, +user.coin_purse, !profile.banking ? "API disabled" : `**${utils.currencyFormat(+profile.banking.balance)}** coins`)]
     })
 }

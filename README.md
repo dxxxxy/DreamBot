@@ -1,13 +1,20 @@
 # DreamBot
 ### Recode currently in progress, for the old bot, visit [DreamBot/legacy](https://github.com/DxxxxY/DreamBot/tree/legacy)<hr>
 
-An open source hypixel skyblock stats discord bot `developped by DxxxxY#5818`. Featuring simple, clean yet elegant embed messages with custom emojis integration.
+An open source hypixel skyblock stats discord bot. Featuring simple, clean yet elegant embed messages with custom emojis integrated.
 
 ## Instructions
-1. Clone this repository. (`git clone https://github.com/DxxxxY/DreamBot.git`)
-2. Create a `.env` file with `CLIENT_TOKEN`, `PREFIX`, `APIKEY` and `DATABASE` as keys.
-3. Install the dependencies. (`npm i`)
-4. Start the bot. (`node .`)
+1. Clone repo
+2. Create a `.env` file following this template:
+```
+TOKEN=
+PREFIX=
+APIKEY=
+DATABASE=
+```
+3. `npm i`
+4. `node .`
+> Congrats you made it.
 
 ## Features
 > Please take note that [] means required while <> means optional (arguments)
@@ -21,9 +28,8 @@ An open source hypixel skyblock stats discord bot `developped by DxxxxY#5818`. F
 - `d!info <IGN>` - Shows basic info
 
 ## Credits
-- [InventiveTalent](https://github.com/InventivetalentDev) - Event timers API
-- [Hypixel-Skyblock Wiki](https://hypixel-skyblock.fandom.com/wiki/Hypixel_SkyBlock_Wiki) - Emotes, XP tables, Informational content
+- [InventiveTalent](https://github.com/InventivetalentDev) - Event Timers API
+- [Hypixel-Skyblock Wiki](https://hypixel-skyblock.fandom.com/wiki/Hypixel_SkyBlock_Wiki) - Media, XP tables, Info
 - [Minetools](https://api.minetools.eu/) - Minecraft API
 - [Visage](https://visage.surgeplay.com/index.html) - Skins API
 - [Hypixel](https://api.hypixel.net/) - Hypixel API
-

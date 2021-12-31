@@ -3,74 +3,6 @@ const client = require("../app")
 const colors = require("./colors")
 const data = require("../data.json")
 
-// const formatSkills = (emoji, name, l_value, h_value, n_value, m_value, message) => {
-//     let body
-//     if (l_value >= m_value) {
-//         body = "Maxed**"
-//     } else if (!h_value) {
-//         body = "Locked**"
-//     } else {
-//         body = `${((h_value / n_value) * 100).toFixed(1)}%** to level ${+l_value + 1}\n**${formatNumbers(h_value)} / ${formatNumbers2(n_value)}**`
-//     }
-//     return [
-//         `${emoji} ${name}`,
-//         `**Level ${l_value}**\n**${body}`,
-//         true
-//     ]
-// }
-
-// const formatSlayers = (emoji, name, l_value, h_value, n_value, m_value) => {
-//     if (l_value == 0 || !h_value) {
-//         body = `0%** to level ${+l_value + 1}\n**0 / ${formatNumbers2(n_value)}**`
-//     } else if (l_value >= m_value) {
-//         body = "Maxed**"
-//     } else {
-//         body = `${((h_value / n_value) * 100).toFixed(1)}%** to level ${+l_value + 1}\n**${formatNumbers(h_value)} / ${formatNumbers2(n_value)}**`
-//     }
-//     return [
-//         `${emoji} ${name}`,
-//         `**Level ${l_value}**\n**${body}`,
-//         true
-//     ]
-// }
-
-// const utils = {
-//     SkillsEmbed: (name, profile, farmingL, miningL, combatL, foragingL, fishingL, enchantingL, alchemyL, carpentryL, runecraftingL, tamingL, thumbnail, farmingH, farmingN, miningH, miningN, combatH, combatN, foragingH, foragingN, fishingH, fishingN, enchantingH, enchantingN, alchemyH, alchemyN, carpentryH, carpentryN, runecraftingH, runecraftingN, tamingH, tamingN, message) => {
-//         Profile.findOne({
-//             discordID: message.author.id
-//         }, async(err, res) => {
-//             const apiKey = "9151ebae-e860-4346-8913-633317c85b58"
-//             if (err) return message.channel.send(utils.BasicEmbed("Error", colors.Red, err))
-//             let embed = new Discord.MessageEmbed()
-//                 .setTitle(`**Skills (${name} on ${profile})**`)
-//                 .setColor(colors.Cyan)
-//                 .setDescription(`Average Skill Level: **${((+farmingL + +miningL + +combatL + +foragingL + +fishingL + +enchantingL + +alchemyL + +tamingL)/8).toFixed(2)}**`)
-//                 .setThumbnail(thumbnail)
-//                 .addField(...formatSkills("<:Farming:719349059562897438>", "Farming", farmingL, farmingH, farmingN, 50, message))
-//                 .addField(...formatSkills("<:Mining:719349059546251354>", "Mining", miningL, miningH, miningN, 50, message))
-//                 .addField(...formatSkills("<:Combat:719349059533668374>", "Combat", combatL, combatH, combatN, 50, message))
-//                 .addField(...formatSkills("<:Foraging:719349059143598091>", "Foraging", foragingL, foragingH, foragingN, 50, message))
-//                 .addField(...formatSkills("<:Fishing:719349059185278998>", "Fishing", fishingL, fishingH, fishingN, 50, message))
-//                 .addField(...formatSkills("<:Enchanting:719349059487268994>", "Enchanting", enchantingL, enchantingH, enchantingN, 50, message))
-//                 .addField(...formatSkills("<:Alchemy:719349059441393674>", "Alchemy", alchemyL, alchemyH, alchemyN, 50, message))
-//                 .addField(...formatSkills("<:Carpentry:719349059261038594>", "Carpentry", carpentryL, carpentryH, carpentryN, 25, message))
-//                 .addField(...formatSkills("<:Runecrafting:719349059269427211>", "Runecrafting", runecraftingL, runecraftingH, runecraftingN, 25, message))
-//                 .addField(...formatSkills("<:Taming:719349059579805757>", "Taming", tamingL, tamingH, tamingN, 50, message))
-//             return message.channel.send(embed)
-//         })
-//     },
-//     SlayersEmbed: (name, profile, revL, tarL, svenL, thumbnail, revH, revN, tarH, tarN, svenH, svenN) => {
-//         let embed = new Discord.MessageEmbed()
-//             .setTitle(`**Slayers (${name} on ${profile})**`)
-//             .setColor(colors.Cyan)
-//             .setDescription(`Average Slayer Level: **${((+revL+ +tarL+ +svenL)/3).toFixed(2)}**`)
-//             .setThumbnail(thumbnail)
-//             .addField(...formatSlayers("<:Revenant:719599242238230641>", "Revenant", revL, revH, revN, 9))
-//             .addField(...formatSlayers("<:Tarantula:719599242490151062>", "Tarantula", tarL, tarH, tarN, 9))
-//             .addField(...formatSlayers("<:Sven:719599241856548904>", "Sven", svenL, svenH, svenN, 9))
-//         return embed
-//     },
-// }
 String.prototype.capitalize = function() {
     return this.toLowerCase().replace(/_/g, " ").replace(/(^|\s)([a-z])/g, function(m, p1, p2) { return p1 + p2.toUpperCase() })
 }
@@ -80,114 +12,124 @@ Object.prototype.nameOf = function() {
 }
 
 module.exports = {
-    currencyFormat: (n) => {
-        if (n >= 1000000000) n = `${(n/1000000000).toFixed(1)}b` //billions
-        else if (n >= 1000000) n = `${(n/1000000).toFixed(1)}m` //millions
-        else if (n >= 1000) n = `${(n/1000).toFixed(1)}k` //thousands
-        else n.toFixed(1) //hundreds
-        return n
-    },
-    percentFormat: (n) => {
-        return (n * 100).toFixed() + "%"
-    },
-    getLatestProfile: (profiles, uuid) => {
-        let lastSaves = [],
-            profilesArr = [],
-            profileNames = []
-        Object.keys(profiles).forEach(profile => {
-                lastSaves.push(profiles[profile].members[uuid].last_save)
-                profilesArr.push(profiles[profile])
-                profileNames.push(profiles[profile].cute_name)
+        currencyFormat: (n) => {
+            if (n >= 1000000000) n = `${(n/1000000000).toFixed(2)}b` //billions
+            else if (n >= 1000000) n = `${(n/1000000).toFixed(2)}m` //millions
+            else if (n >= 1000) n = `${(n/1000).toFixed(1)}k` //thousands
+            else n = n.toFixed(1) //hundreds
+            return n
+        },
+        percentFormat: (n) => {
+            return (n * 100).toFixed(1) + "%"
+        },
+        getLatestProfile: (profiles, uuid) => {
+            let lastSaves = [],
+                profilesArr = [],
+                profileNames = []
+            Object.keys(profiles).forEach(profile => {
+                    lastSaves.push(profiles[profile].members[uuid].last_save)
+                    profilesArr.push(profiles[profile])
+                    profileNames.push(profiles[profile].cute_name)
+                })
+                //get last updated array through index
+            return [profilesArr[lastSaves.indexOf(Math.max(...lastSaves))], profileNames[lastSaves.indexOf(Math.max(...lastSaves))]]
+        },
+        Error: (e) => {
+            return new MessageEmbed()
+                .setTitle("Error")
+                .setDescription(e)
+                .setColor(colors.red)
+        },
+        Warning: (e) => {
+            return new MessageEmbed()
+                .setTitle("Warning")
+                .setDescription(e)
+                .setColor(colors.yellow)
+        },
+        Success: (e) => {
+            return new MessageEmbed()
+                .setTitle("Success")
+                .setDescription(e)
+                .setColor(colors.lime)
+        },
+        Help: () => {
+            let desc = ""
+            Array.from(client.module.commands).forEach(e => {
+                if (e[1][0]) desc += `[\`${process.env.PREFIX + e[0]}\` - \`${process.env.PREFIX + e[1][0]}\`]\n`
             })
-            //get last updated array through index
-        return [profilesArr[lastSaves.indexOf(Math.max(...lastSaves))], profileNames[lastSaves.indexOf(Math.max(...lastSaves))]]
-    },
-    Error: (e) => {
-        return new MessageEmbed()
-            .setTitle("Error")
-            .setDescription(e)
-            .setColor(colors.red)
-    },
-    Warning: (e) => {
-        return new MessageEmbed()
-            .setTitle("Warning")
-            .setDescription(e)
-            .setColor(colors.yellow)
-    },
-    Success: (e) => {
-        return new MessageEmbed()
-            .setTitle("Success")
-            .setDescription(e)
-            .setColor(colors.lime)
-    },
-    Help: () => {
-        let desc = ""
-        Array.from(client.module.commands).forEach(e => {
-            if (e[1][0]) desc += `[\`${process.env.PREFIX + e[0]}\` - \`${process.env.PREFIX + e[1][0]}\`]\n`
-        })
 
-        return new MessageEmbed()
-            .setTitle("Help")
-            .setDescription(desc)
-            .setColor(colors.cyan)
-    },
-    Info: (name, profile, thumbnail, fairy, purse, bank) => {
-        return new MessageEmbed()
-            .setTitle(`Info (${name} on ${profile})`)
-            .setColor(colors.cyan)
-            .setThumbnail(thumbnail)
-            .addField(`${data.fairyEmoji} Fairy souls`, `${fairy}`, true)
-            .addField(`${data.coinEmoji} Purse`, `**${module.exports.currencyFormat(purse)}** coins`, true)
-            .addField(`${data.bankEmoji} Bank`, `${bank}`, true)
-    },
-    Pets: (name, profile, thumbnail, pets, stats) => {
-        let embed = new MessageEmbed()
-            .setTitle(`Pets (${name} on ${profile})`)
-            .setColor(colors.cyan)
-            .setThumbnail(thumbnail)
+            return new MessageEmbed()
+                .setTitle("Help")
+                .setDescription(desc)
+                .setColor(colors.cyan)
+        },
+        Info: (name, profile, thumbnail, fairy, purse, bank) => {
+            return new MessageEmbed()
+                .setTitle(`Info (${name} on ${profile})`)
+                .setColor(colors.cyan)
+                .setThumbnail(thumbnail)
+                .addField(`${data.fairyEmoji} Fairy souls`, `${fairy}`, true)
+                .addField(`${data.coinEmoji} Purse`, `**${module.exports.currencyFormat(purse)}** coins`, true)
+                .addField(`${data.bankEmoji} Bank`, `${bank}`, true)
+        },
+        Pets: (name, profile, thumbnail, pets, stats) => {
+                let embed = new MessageEmbed()
+                    .setTitle(`Pets (${name} on ${profile})`)
+                    .setColor(colors.cyan)
+                    .setThumbnail(thumbnail)
 
-        let totalExp = 0,
-            fishMilestone,
-            mineMilestone
-            //get pets stats
-        Object.keys(pets).forEach(pet => {
-            totalExp += pets[pet].exp
-            let petField
-            let cumu = JSON.parse(JSON.stringify(data))[`expCumu${pets[pet].tier}`]
-            let need = JSON.parse(JSON.stringify(data))[`expNeed${pets[pet].tier}`]
-            for (let x in cumu) {
-                if (pets[pet].exp < cumu[x]) {
-                    petField = `Level **${x}**
+                let totalExp = 0,
+                    fishMilestone,
+                    mineMilestone,
+                    i = 0
+
+                pets.sort((a, b) => b.exp - a.exp) //from highest to lowest
+                    //get pets stats
+                Object.keys(pets).forEach(pet => {
+                    totalExp += pets[pet].exp
+                    let petField
+
+                    if (i >= 25) {
+                        return
+                    }
+                    i++
+                    let cumu = JSON.parse(JSON.stringify(data))[`expCumu${pets[pet].tier}`]
+                    let need = JSON.parse(JSON.stringify(data))[`expNeed${pets[pet].tier}`]
+                    for (let x in cumu) {
+                        if (pets[pet].exp < cumu[x]) {
+                            petField = `Level **${x}**
                     **${module.exports.percentFormat((pets[pet].exp - cumu[x - 1]) / need[x])}** to level **${+x + 1}**
                     **${module.exports.currencyFormat(pets[pet].exp - cumu[x - 1])}** / **${module.exports.currencyFormat(need[x])}**`
-                    break
+                            break
+                        }
+                    }
+                    if (petField == undefined) petField = `Level **100**\n**${module.exports.currencyFormat(pets[pet].exp)}**`
+                        //add info as field
+                    embed.addField(`${JSON.parse(JSON.stringify(data))[pets[pet].tier]} ${pets[pet].type.capitalize()}`, petField, true)
+                })
+
+                //fishing milestone
+                for (let x in data.milestoneFish) {
+                    if (stats.pet_milestone_sea_creatures_killed < data.milestoneFish[x]) {
+                        fishMilestone = `${stats.pet_milestone_sea_creatures_killed} / ${data.milestoneFish[x]} (${data.milestoneTier[x]})`
+                        break
+                    }
                 }
-            }
-            if (petField == undefined) petField = "**Maxed**"
-                //add info as field
-            embed.addField(`${JSON.parse(JSON.stringify(data))[pets[pet].tier]} ${pets[pet].type.capitalize()}`, petField, true)
-        })
 
-        //fishing milestone
-        for (let x in data.milestoneFish) {
-            if (stats.pet_milestone_sea_creatures_killed < data.milestoneFish[x]) {
-                fishMilestone = `${stats.pet_milestone_sea_creatures_killed} / ${data.milestoneFish[x]} (${data.milestoneTier[x]})`
-                break
-            }
-        }
+                //mining milestone
+                for (let x in data.milestoneMine) {
+                    if (stats.pet_milestone_ores_mined < data.milestoneMine[x]) {
+                        mineMilestone = `${stats.pet_milestone_ores_mined} / ${data.milestoneMine[x]} (${data.milestoneTier[x]})`
+                        break
+                    }
+                }
 
-        //mining milestone
-        for (let x in data.milestoneMine) {
-            if (stats.pet_milestone_ores_mined < data.milestoneMine[x]) {
-                mineMilestone = `${stats.pet_milestone_ores_mined} / ${data.milestoneMine[x]} (${data.milestoneTier[x]})`
-                break
-            }
-        }
-
-        //formatting
-        if (fishMilestone == undefined) fishMilestone = "Maxed (Legendary)" //if maxed
-        if (mineMilestone == undefined) mineMilestone = "Maxed (Legendary)" //if maxed
-        embed.setDescription(`Total Exp: **${module.exports.currencyFormat(totalExp)}**\nFishing Milestone: **${fishMilestone}**\nMining Milestone: **${mineMilestone}**`)
+                //formatting
+                if (fishMilestone == undefined) fishMilestone = "Maxed (Legendary)" //if maxed
+                if (mineMilestone == undefined) mineMilestone = "Maxed (Legendary)" //if maxed
+                embed.setDescription(`Total Exp: **${module.exports.currencyFormat(totalExp)}**
+        Fishing Milestone: **${fishMilestone}**
+        Mining Milestone: **${mineMilestone}**${i >= 24 ? `\nOnly showing first **25** of **${pets.length}** pets` : ""}\nOrdered by **highest**`)
         return embed
     },
     Register: () => {
@@ -202,10 +144,97 @@ module.exports = {
             .setColor(colors.cyan)
             .setFooter({ text: "Thanks to InventiveTalent for the API", iconURL: "https://avatars.githubusercontent.com/u/6525296?v=4" })
             //"Thanks to InventiveTalent for the API", "https://avatars.githubusercontent.com/u/6525296?v=4"
+
         timerArray.forEach(timer => {
             let name = timer.type.replace(/[A-Z-_\&](?=[a-z0-9]+)|[A-Z-_\&]+(?![a-z0-9])/g, ' $&').trim().capitalize()
             embed.addField(`${JSON.parse(JSON.stringify(data))[timer.type]} ${name}`, `**${timer.estimateRelative}**`, true)
         })
+        return embed
+    },
+    Slayers: (name, profile, thumbnail, slayer) => {
+        let embed = new MessageEmbed()
+            .setTitle(`Slayers (${name} on ${profile})`)
+            .setColor(colors.cyan)
+            .setThumbnail(thumbnail)
+
+        let totalExp = 0,
+            i = 0,
+            levels = 0
+        Object.keys(slayer).forEach(boss => {
+            let field
+            if (!slayer[boss].hasOwnProperty("xp")) return
+            totalExp += slayer[boss].xp
+            let need = JSON.parse(JSON.stringify(data))[boss]
+
+            let emoji = JSON.parse(JSON.stringify(data))[JSON.parse(JSON.stringify(data))[boss.toUpperCase()]]
+            for (let x in need) {
+                if (slayer[boss].xp < need[x]) {
+                    levels += +x
+                    i++
+
+                    field = [`${emoji} ${JSON.parse(JSON.stringify(data))[boss.toUpperCase()]}`, `Level **${x}**
+                    **${module.exports.percentFormat(slayer[boss].xp / need[x])}** to level **${+x + 1}**
+                    **${module.exports.currencyFormat(slayer[boss].xp)}** / **${module.exports.currencyFormat(need[x])}**`, true]
+
+                    break
+                }
+
+            }
+            if (field == undefined) field = [`${emoji} ${JSON.parse(JSON.stringify(data))[boss.toUpperCase()]}`, `Level **9**\n**${module.exports.currencyFormat(slayer[boss].xp)}**`, true]
+            embed.addField(...field)
+        })
+
+        embed.setDescription(`Slayer Average: **${(levels / i).toFixed(2)}**
+        Total Exp: **${module.exports.currencyFormat(totalExp)}**`)
+
+        return embed
+    },       
+    Skills: (name, profile, thumbnail, stats) => {
+        let embed = new MessageEmbed()
+            .setTitle(`Skills (${name} on ${profile})`)
+            .setColor(colors.cyan)
+            .setThumbnail(thumbnail)
+
+        let totalExp = 0,
+            i = 0,
+            levels = 0
+
+        Object.keys(stats).slice().forEach(stat => {
+            if (!stat.includes("experience_skill")) {
+                delete stats[stat]
+            }
+        })
+
+        // stats = Object.entries(stats).sort((a,b) => b[1]-a[1])
+
+        Object.entries(stats).sort((a,b) => b[1]-a[1]).forEach(stat => {
+                //[ 'experience', 'skill', 'runecrafting' ]
+                let skillName = stat[0].split("_")[2]
+                let skillField
+                console.log(skillName, stat, stat[0], stat[1])
+                totalExp += stat[1]
+                let cumu = JSON.parse(JSON.stringify(data))[skillName != "runecrafting" && skillName != "social" ? "expAllCumu" : `exp${skillName.capitalize()}Cumu`]
+                let need = JSON.parse(JSON.stringify(data))[skillName != "runecrafting" && skillName != "social" ? "expAllNeed" : `exp${skillName.capitalize()}Need`]
+                for (let x in cumu) {
+                    if (stat[1] < cumu[x]) {
+                        levels += +x
+                        i++
+                        console.log(stats[0], stat[1])
+                        skillField = `Level **${x}**
+                        **${module.exports.percentFormat((stat[1] - cumu[x - 1]) / need[x])}** to level **${+x + 1}**
+                        **${module.exports.currencyFormat(stat[1] - cumu[x - 1])}** / **${module.exports.currencyFormat(need[x])}**`
+                        break
+                    }
+                }
+                if (skillField == undefined) skillField = `Level **${Object.keys(cumu).length}**\n**${module.exports.currencyFormat(stat[1])}**`
+                    //add info as field
+                embed.addField(`${JSON.parse(JSON.stringify(data))[skillName]} ${skillName.capitalize()}`, skillField, true)
+        })
+
+        embed.setDescription(`Skill Average: **${(levels / i).toFixed(2)}**
+        Total Exp: **${module.exports.currencyFormat(totalExp)}**
+        Ordered by **highest**`)
+
         return embed
     }
 }
