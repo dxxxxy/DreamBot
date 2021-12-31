@@ -10,11 +10,5 @@
         "mongoose": "^6.1.4",
         "utf-8-validate": "^5.0.7",
         "zlib-sync": "^0.1.7"
-    },
-    "devDependencies": {
-        "eslint-config-standard": "^16.0.3",
-        "eslint-plugin-import": "^2.25.3",
-        "eslint-plugin-node": "^11.1.0",
-        "eslint-plugin-promise": "^5.2.0"
     }
 }
