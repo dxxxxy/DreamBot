@@ -98,7 +98,7 @@ module.exports = {
             let petField
             totalExp += pets[pet].exp //total xp
 
-            if (i >= 25) //discord embed limit is 25 fields
+            if (i >= 25) return //discord embed limit is 25 fields
             i++ //number of pets/fields
 
             //get xp tables
@@ -143,7 +143,7 @@ module.exports = {
 
         embed.setDescription(`Total Exp: **${totalExp.format()}**
             Fishing Milestone: **${fishMilestone}**
-            Mining Milestone: **${mineMilestone}**`)
+            Mining Milestone: **${mineMilestone}**${i >= 25 ? `\nOnly showing first **25** of **${pets.length}** pets` : ""}\nOrdered by **highest**`)
 
         return embed
     },
