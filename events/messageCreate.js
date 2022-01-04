@@ -4,8 +4,8 @@ module.exports = async(client, message, args) => {
     if (!args[0]) return
     const command = args.shift().toLowerCase() //command
     let cmd = client.commands.get(command) //function
-    if (cmd[0]) cmd = cmd[1]
     if (!cmd) return
+    if (cmd[0]) cmd = cmd[1]
     console.log(`Author "${message.author.username}" | Command "${message}"`)
     cmd.run(client, message, args)
 }

@@ -27,8 +27,13 @@ exports.run = async(client, message, args) => {
             })
             return newRegister.save()
         }
-        message.channel.send({
-            embeds: [utils.Warning("You're already registered")]
+        Register.updateOne({ discordID: message.author.id }, { minecraftID: uuid }, (err, res) => {
+            if (err) message.channel.send({
+                embeds: [utils.Error(err)]
+            })
+            else message.channel.send({
+                embeds: [utils.Warning(`Changed to \`${args[0]}\` `)]
+            })
         })
     })
 }
