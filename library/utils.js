@@ -34,7 +34,7 @@ module.exports = {
             Object.keys(profiles).forEach(profileName => {
                 lastSaves.push(profiles[profileName].members[uuid].last_save)
                 profilesArr.push(profiles[profileName])
-                profileNames.push(profiles[profileName].cute_userName)
+                profileNames.push(profiles[profileName].cute_name)
             })
 
             return [profilesArr[lastSaves.indexOf(Math.max(...lastSaves))], profileNames[lastSaves.indexOf(Math.max(...lastSaves))]]
