@@ -102,8 +102,8 @@ module.exports = {
             i++ //number of pets/fields
 
             //get xp tables
-            let cumu = JSON.parse(JSON.stringify(data))[`expCumu${pets[pet].tier}`]
-            let need = JSON.parse(JSON.stringify(data))[`expNeed${pets[pet].tier}`]
+            let cumu = data[`expCumu${pets[pet].tier}`]
+            let need = data[`expNeed${pets[pet].tier}`]
 
             //get level and progress to next
             for (let x in cumu) {
@@ -119,7 +119,7 @@ module.exports = {
             if (petField == undefined) petField = `Level **100**\n**${pets[pet].exp.format()}**`
                 
             //add field
-            embed.addField(`${JSON.parse(JSON.stringify(data))[pets[pet].tier]} ${pets[pet].type.capitalize()}`, petField, true)
+            embed.addField(`${data[pets[pet].tier]} ${pets[pet].type.capitalize()}`, petField, true)
         })
 
         //fishing milestone
@@ -167,7 +167,7 @@ module.exports = {
             //darkAuction => Dark Auction
             let name = timer.type.replace(/[A-Z-_\&](?=[a-z0-9]+)|[A-Z-_\&]+(?![a-z0-9])/g, ' $&').trim().capitalize()
 
-            embed.addField(`${JSON.parse(JSON.stringify(data))[timer.type]} ${name}`, `**${timer.estimateRelative}**`, true)
+            embed.addField(`${data[timer.type]} ${name}`, `**${timer.estimateRelative}**`, true)
         })
 
         return embed
@@ -191,10 +191,10 @@ module.exports = {
             totalExp += slayer[boss].xp
 
             //get xp table
-            let need = JSON.parse(JSON.stringify(data))[boss]
+            let need = data[boss]
 
             //get emoji
-            let emoji = JSON.parse(JSON.stringify(data))[JSON.parse(JSON.stringify(data))[boss.toUpperCase()]]
+            let emoji = data[data[boss.toUpperCase()]]
 
             //get level and progress to next
             for (let x in need) {
@@ -203,7 +203,7 @@ module.exports = {
                     levels += +x 
                     i++
 
-                    field = [`${emoji} ${JSON.parse(JSON.stringify(data))[boss.toUpperCase()]}`, `Level **${x}**
+                    field = [`${emoji} ${data[boss.toUpperCase()]}`, `Level **${x}**
                     **${(slayer[boss].xp / need[x]).percent()}** to level **${+x + 1}**
                     **${slayer[boss].xp.format()}** / **${need[x].format()}**`, true]
 
@@ -212,7 +212,7 @@ module.exports = {
             }
 
             //if xp is over the last level, its maxed
-            if (field == undefined) field = [`${emoji} ${JSON.parse(JSON.stringify(data))[boss.toUpperCase()]}`, `Level **9**\n**${slayer[boss].xp.format()}**`, true]
+            if (field == undefined) field = [`${emoji} ${data[boss.toUpperCase()]}`, `Level **9**\n**${slayer[boss].xp.format()}**`, true]
             
             //add field
             embed.addField(...field)
@@ -253,8 +253,8 @@ module.exports = {
                 totalExp += stat[1]
 
                 //get xp tables
-                let cumu = JSON.parse(JSON.stringify(data))[skillName != "runecrafting" && skillName != "social" ? "expAllCumu" : `exp${skillName.capitalize()}Cumu`]
-                let need = JSON.parse(JSON.stringify(data))[skillName != "runecrafting" && skillName != "social" ? "expAllNeed" : `exp${skillName.capitalize()}Need`]
+                let cumu = data[skillName != "runecrafting" && skillName != "social" ? "expAllCumu" : `exp${skillName.capitalize()}Cumu`]
+                let need = data[skillName != "runecrafting" && skillName != "social" ? "expAllNeed" : `exp${skillName.capitalize()}Need`]
 
                 //get level and progress to next
                 for (let x in cumu) {
@@ -274,7 +274,7 @@ module.exports = {
                 if (skillField == undefined) skillField = `Level **${Object.keys(cumu).length}**\n**${stat[1].format()}**`
                 
                 //add field
-                embed.addField(`${JSON.parse(JSON.stringify(data))[skillName]} ${skillName.capitalize()}`, skillField, true)
+                embed.addField(`${data[skillName]} ${skillName.capitalize()}`, skillField, true)
             })
 
         else return embed.setDescription("API Disabled")
