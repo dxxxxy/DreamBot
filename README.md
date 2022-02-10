@@ -49,7 +49,7 @@ Two commands will be registered, `h` and `help` prefixed with whatever the value
 - For event binding:
 An event is registered by reading its file name and exporting it with `module.exports`.
 
-As an example: imagine a file named `ready` in the `events/` directory. The content of that file is:
+As an example: imagine a file named `ready.js` in the `events/` directory. The content of that file is:
 ```js
 module.exports = (client) => {
     console.log(`Logged in as ${client.user.tag}`)

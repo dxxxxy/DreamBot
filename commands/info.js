@@ -24,6 +24,8 @@ exports.run = async(client, message, args) => {
     //get profile
     let profiles = await (await get(`https://api.hypixel.net/skyblock/profiles?key=${process.env.APIKEY}&uuid=${minecraftID}`)).data.profiles
 
+    if (profiles == null) return message.channel.send({ embeds: [utils.Error("No profiles found")] });
+
     //get profile info
     let profile = await (await get(`https://api.hypixel.net/skyblock/profile?key=${process.env.APIKEY}&profile=${utils.getLatestProfile(profiles, minecraftID)[0].profile_id}`)).data.profile
 
