@@ -7,7 +7,7 @@
         "discord.js": "^13.6.0",
         "dotenv": "^16.0.0",
         "erlpack": "github:discord/erlpack",
-        "mongoose": "^6.2.4",
+        "mongoose": "^6.4.6",
         "utf-8-validate": "^5.0.8",
         "zlib-sync": "^0.1.7"
     }
